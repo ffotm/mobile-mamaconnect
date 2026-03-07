@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'constants/app_colors.dart';
@@ -9,6 +8,14 @@ import 'screens/auth/register_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/timeline/timeline_screen.dart';
+import 'screens/bluetooth/bluetooth_screen.dart';
+import 'screens/monitor/monitor_screen.dart';
+import 'screens/graphs/graphs_screen.dart';
+import 'screens/alerts/alerts_screen.dart';
+import 'screens/midwives/midwives_screen.dart';
+import 'screens/profile/profile_screen.dart';
+import 'screens/contact/contact_screen.dart';
+import 'screens/shop/shop_screen.dart';
 import 'services/auth_provider.dart';
 
 void main() {
@@ -37,6 +44,14 @@ class MamacitaApp extends StatelessWidget {
           AppRoutes.onboarding: (_) => const OnboardingScreen(),
           AppRoutes.home: (_) => const HomeScreen(),
           '/timeline': (_) => const TimelineScreen(),
+          '/bluetooth': (_) => const BluetoothScreen(),
+          '/monitor': (_) => const MonitorScreen(),
+          '/graphs': (_) =>
+              GraphsScreen(heartbeatHistory: const [140, 142, 138, 145]),
+          '/alerts': (_) => const AlertsScreen(),
+          '/midwives': (_) => const MidwivesScreen(),
+          '/profile': (_) => const ProfileScreen(),
+          '/shop': (_) => const ShopScreen(),
         },
       ),
     );

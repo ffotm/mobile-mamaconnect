@@ -1,11 +1,15 @@
-// lib/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
-import 'package:mamacita/services/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
+import '../../services/auth_provider.dart';
 import '../timeline/timeline_screen.dart';
+import '../bluetooth/bluetooth_screen.dart';
+import '../alerts/alerts_screen.dart';
+import '../midwives/midwives_screen.dart';
+import '../profile/profile_screen.dart';
+import '../shop/shop_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,7 +53,43 @@ class _HomeScreenState extends State<HomeScreen> {
               daysToGo: _daysToGo,
               progress: _progress,
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md, AppSpacing.md, AppSpacing.md, 0),
+              child: Row(
+                children: [
+                  _QuickAction(
+                    icon: Icons.bluetooth,
+                    label: 'Connect',
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const BluetoothScreen())),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  _QuickAction(
+                    icon: Icons.notifications_outlined,
+                    label: 'Alerts',
+                    badge: true,
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const AlertsScreen())),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  _QuickAction(
+                    icon: Icons.timeline,
+                    label: 'Timeline',
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const TimelineScreen())),
+                  ),
+                ],
+              ),
+            ),
 
+            const SizedBox(height: AppSpacing.sm),
             // Feature Grid
             Expanded(
               child: SingleChildScrollView(
@@ -83,6 +123,63 @@ class _HomeScreenState extends State<HomeScreen> {
         bottomNavigationBar: _BottomNav(
           currentIndex: _bottomNavIndex,
           onTap: (i) => setState(() => _bottomNavIndex = i),
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickAction extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool badge;
+  final VoidCallback onTap;
+
+  const _QuickAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.badge = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(icon, color: AppColors.primary, size: 18),
+                  if (badge)
+                    Positioned(
+                      top: -3,
+                      right: -3,
+                      child: Container(
+                        width: 7,
+                        height: 7,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.red),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(width: 6),
+              Text(label,
+                  style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.textDark, fontWeight: FontWeight.w500)),
+            ],
+          ),
         ),
       ),
     );
@@ -389,31 +486,76 @@ class _BottomNav extends StatelessWidget {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(_items.length, (i) {
-          final active = i == currentIndex;
-          return GestureDetector(
-            onTap: () => onTap(i),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  _items[i].icon,
-                  color: active ? AppColors.primary : AppColors.textLight,
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  _items[i].label,
-                  style: AppTextStyles.bodySmall.copyWith(
-                    color: active ? AppColors.primary : AppColors.textLight,
-                    fontSize: 10,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        _NavTile(
+            icon: Icons.home_rounded,
+            label: 'Home',
+            active: currentIndex == 0,
+            onTap: () {
+              onTap(0);
+            }),
+        _NavTile(
+            icon: Icons.people_outline,
+            label: 'Social',
+            active: currentIndex == 1,
+            onTap: () {
+              onTap(1);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const MidwivesScreen()));
+            }),
+        _NavTile(
+            icon: Icons.storefront_outlined,
+            label: 'Shop',
+            active: currentIndex == 2,
+            onTap: () {
+              onTap(2);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const ShopScreen()));
+            }),
+        _NavTile(
+            icon: Icons.person_outline,
+            label: 'Profile',
+            active: currentIndex == 3,
+            onTap: () {
+              onTap(3);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()));
+            }),
+      ]),
+    );
+  }
+}
+
+class _NavTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool active;
+  final VoidCallback onTap;
+
+  const _NavTile({
+    required this.icon,
+    required this.label,
+    required this.active,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon,
+              color: active ? AppColors.primary : AppColors.textLight,
+              size: 24),
+          const SizedBox(height: 2),
+          Text(label,
+              style: AppTextStyles.bodySmall.copyWith(
+                color: active ? AppColors.primary : AppColors.textLight,
+                fontSize: 10,
+              )),
+        ],
       ),
     );
   }
