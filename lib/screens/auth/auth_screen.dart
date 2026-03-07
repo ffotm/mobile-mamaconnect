@@ -1,4 +1,3 @@
-// lib/screens/auth/auth_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -18,7 +17,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  int _activeTab = 0; // 0 = Sign In, 1 = Register
+  int _activeTab = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +43,6 @@ class _AuthScreenState extends State<AuthScreen> {
                       const Text('Hello Mamacita',
                           style: AppTextStyles.heading1),
                       const SizedBox(height: AppSpacing.xl),
-
-                      // Tab switcher
                       AuthTabSwitcher(
                         activeIndex: _activeTab,
                         onTabChanged: (index) {
@@ -61,15 +58,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           }
                         },
                       ),
-
                       const SizedBox(height: AppSpacing.xl),
-
-                      // Login form
                       const _LoginForm(),
-
                       const SizedBox(height: AppSpacing.xl),
-
-                      // Other sign in options
                       const Text('Other sign in options',
                           style: AppTextStyles.bodySmall),
                       const SizedBox(height: AppSpacing.md),

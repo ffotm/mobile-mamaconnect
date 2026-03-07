@@ -22,7 +22,7 @@ class _ShopScreenState extends State<ShopScreen> {
       priceValue: 12900,
       description: 'Essential monitoring for your pregnancy',
       features: [
-        'Mamacita Monitor device',
+        'Mamaconnect Monitor device',
         'Heart rate sensor',
         'Movement detection',
         '1 year app subscription',
@@ -36,7 +36,7 @@ class _ShopScreenState extends State<ShopScreen> {
       priceValue: 18900,
       description: 'Complete care for peace of mind',
       features: [
-        'Mamacita Monitor device',
+        'Mamaconnect Monitor device',
         'Heart rate & SpO₂ sensor',
         'Temperature sensor',
         'Movement detection',
@@ -52,7 +52,7 @@ class _ShopScreenState extends State<ShopScreen> {
       priceValue: 29900,
       description: 'Full suite with dedicated care',
       features: [
-        'Mamacita Monitor Pro device',
+        'Mamaconnect Monitor Pro device',
         'All sensors included',
         'Unlimited app subscription',
         '24/7 midwife hotline',
@@ -108,7 +108,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Mamacita\nMonitor',
+                        Text('Mamaconnect\nMonitor',
                             style: AppTextStyles.heading2
                                 .copyWith(color: Colors.white, height: 1.2)),
                         const SizedBox(height: AppSpacing.sm),

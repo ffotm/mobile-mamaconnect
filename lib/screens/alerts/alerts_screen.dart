@@ -1,4 +1,3 @@
-// lib/screens/alerts/alerts_screen.dart
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
@@ -69,7 +68,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
     _Alert(
       title: 'Device Battery Low',
       description:
-          'Your Mamacita Monitor battery is at 15%. Please charge it soon to avoid data gaps.',
+          'Your Mamaconnect Monitor battery is at 15%. Please charge it soon to avoid data gaps.',
       time: '2 days ago',
       severity: AlertSeverity.warning,
       icon: Icons.battery_alert,

@@ -219,7 +219,7 @@ class _FoundView extends StatelessWidget {
                       color: AppColors.primary, size: 30),
                 ),
                 const SizedBox(height: AppSpacing.md),
-                Text('Mamacita Monitor', style: AppTextStyles.heading3),
+                Text('Mamaconnect Monitor', style: AppTextStyles.heading3),
                 const SizedBox(height: AppSpacing.xs),
                 Text('Ready to connect',
                     style: AppTextStyles.bodySmall
@@ -273,7 +273,7 @@ class _ConnectingView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text('Connecting to\nMamacita Monitor...',
+          Text('Connecting to\nMamaconnect Monitor...',
               textAlign: TextAlign.center, style: AppTextStyles.heading3),
           const SizedBox(height: AppSpacing.sm),
           Text('This will only take a moment', style: AppTextStyles.bodyMedium),
@@ -344,7 +344,7 @@ class _ConnectedView extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
           Text('Connected Successfully!', style: AppTextStyles.heading2),
           const SizedBox(height: AppSpacing.xs),
-          Text('Your Mamacita Monitor is ready to use',
+          Text('Your Mamaconnect Monitor is ready to use',
               style: AppTextStyles.bodyMedium),
           const SizedBox(height: AppSpacing.xl),
           Container(

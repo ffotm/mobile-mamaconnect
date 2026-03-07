@@ -296,7 +296,7 @@ class _DeviceStatusBar extends StatelessWidget {
               const BoxDecoration(shape: BoxShape.circle, color: Colors.green),
         ),
         const SizedBox(width: 6),
-        Text('Mamacita Monitor • Connected',
+        Text('Mamaconnect Monitor • Connected',
             style:
                 AppTextStyles.bodySmall.copyWith(color: AppColors.textMedium)),
         const Spacer(),

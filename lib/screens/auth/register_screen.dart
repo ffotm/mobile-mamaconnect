@@ -1,4 +1,3 @@
-// lib/screens/auth/register_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -22,7 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  String _selectedRole = 'client'; // 'client' or 'midwife'
+  String _selectedRole = 'client';
 
   @override
   void dispose() {
@@ -81,18 +80,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: AppTextStyles.heading1),
                       ),
                       const SizedBox(height: AppSpacing.xl),
-
-                      // Tab (Register is active)
                       AuthTabSwitcher(
                         activeIndex: 1,
                         onTabChanged: (index) {
                           if (index == 0) Navigator.pop(context);
                         },
                       ),
-
                       const SizedBox(height: AppSpacing.lg),
-
-                      // Register form
                       Form(
                         key: _formKey,
                         child: Column(
@@ -160,8 +154,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                             ),
                             const SizedBox(height: AppSpacing.md),
-
-                            // Role selector
                             const Text('What are you ?',
                                 style: AppTextStyles.labelText),
                             const SizedBox(height: AppSpacing.sm),
@@ -185,7 +177,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ],
                             ),
                             const SizedBox(height: AppSpacing.lg),
-
                             Consumer<AuthProvider>(
                               builder: (_, auth, __) => PrimaryButton(
                                 label: 'Continue',

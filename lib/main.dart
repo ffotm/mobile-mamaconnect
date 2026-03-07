@@ -33,7 +33,7 @@ class MamacitaApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
       ],
       child: MaterialApp(
-        title: 'Mamacita',
+        title: 'Mamaconnect',
         debugShowCheckedModeBanner: false,
         theme: _buildTheme(),
         initialRoute: AppRoutes.splash,
