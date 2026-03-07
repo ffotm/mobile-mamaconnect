@@ -1,11 +1,11 @@
 // lib/screens/home/home_screen.dart
 import 'package:flutter/material.dart';
+import 'package:mamacita/services/auth_provider.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
-import '../../widgets/feature_card.dart';
-import '../../services/auth_provider.dart';
+import '../timeline/timeline_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,40 +15,76 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentWeek = 7;
-  int _daysToGo = 228;
-  double _progress = 0.189; // 18.9%
+  final int _currentWeek = 7;
+  final int _daysToGo = 228;
+  final double _progress = 0.189;
+
+  int _bottomNavIndex = 0;
+
+  void _onVerticalDragEnd(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+
+    // Pull DOWN → open timeline
+    if (velocity > 500) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const TimelineScreen(),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header section with progress ring
-              _HeaderSection(
-                currentWeek: _currentWeek,
-                daysToGo: _daysToGo,
-                progress: _progress,
-              ),
+    return GestureDetector(
+      onVerticalDragEnd: _onVerticalDragEnd,
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: Column(
+          children: [
+            // Header
+            _HeaderSection(
+              currentWeek: _currentWeek,
+              daysToGo: _daysToGo,
+              progress: _progress,
+            ),
 
-              const SizedBox(height: AppSpacing.lg),
-
-              // Feature grid
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            // Feature Grid
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(AppSpacing.md),
                 child: _FeatureGrid(),
               ),
+            ),
 
-              const SizedBox(height: AppSpacing.xl),
-            ],
-          ),
+            // Logout Button
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: AppSpacing.sm,
+                horizontal: AppSpacing.md,
+              ),
+              child: GestureDetector(
+                onTap: () => context.read<AuthProvider>().logout().then(
+                      (_) => Navigator.pushReplacementNamed(
+                        context,
+                        AppRoutes.login,
+                      ),
+                    ),
+                child: const CircleAvatar(
+                  radius: 24,
+                  backgroundColor: AppColors.primary,
+                  child: Icon(Icons.logout, color: Colors.white, size: 20),
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: _BottomNav(
+          currentIndex: _bottomNavIndex,
+          onTap: (i) => setState(() => _bottomNavIndex = i),
         ),
       ),
-      bottomNavigationBar: _BottomNav(),
     );
   }
 }
@@ -68,77 +104,48 @@ class _HeaderSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withValues(alpha: 0.85),
-          ],
+          colors: [Color(0xFFE8856A), Color(0xFFD4614A)],
         ),
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(32),
           bottomRight: Radius.circular(32),
         ),
       ),
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.only(
+        top: 56,
+        left: AppSpacing.lg,
+        right: AppSpacing.lg,
+        bottom: AppSpacing.lg,
+      ),
       child: Column(
         children: [
-          // Top row - greeting
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Consumer<AuthProvider>(
-                builder: (_, auth, __) => Text(
-                  'Hi, ${auth.user?.fullName.split(' ').first ?? 'Mama'} 👋',
-                  style: AppTextStyles.heading3.copyWith(color: Colors.white),
-                ),
-              ),
-              GestureDetector(
-                onTap: () => context.read<AuthProvider>().logout().then(
-                      (_) => Navigator.pushReplacementNamed(
-                          context, AppRoutes.login),
-                    ),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white.withValues(alpha: 0.24),
-                  child: const Icon(Icons.person, color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: AppSpacing.lg),
-
-          // Progress ring + stats
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Left stat
               _StatItem(
                 value: '${(progress * 100).toStringAsFixed(1)}%',
-                label: 'done',
-                color: Colors.white,
+                label: 'DONE',
               ),
-
-              // Ring progress
-              _WeekRing(week: currentWeek, progress: progress),
-
-              // Right stat
+              _WeekRing(
+                week: currentWeek,
+                progress: progress,
+              ),
               _StatItem(
                 value: '$daysToGo',
-                label: 'days to go',
-                color: Colors.white,
+                label: 'DAYS TO GO',
               ),
             ],
           ),
-
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            '+3 day',
-            style: AppTextStyles.bodySmall.copyWith(
-              color: Colors.white.withValues(alpha: 0.7),
-            ),
+          const SizedBox(height: 8),
+          Icon(
+            Icons.keyboard_arrow_down,
+            color: Colors.white.withValues(alpha: 0.8),
+            size: 28,
           ),
         ],
       ),
@@ -149,13 +156,8 @@ class _HeaderSection extends StatelessWidget {
 class _StatItem extends StatelessWidget {
   final String value;
   final String label;
-  final Color color;
 
-  const _StatItem({
-    required this.value,
-    required this.label,
-    required this.color,
-  });
+  const _StatItem({required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -163,12 +165,19 @@ class _StatItem extends StatelessWidget {
       children: [
         Text(
           value,
-          style: AppTextStyles.heading2.copyWith(color: color),
+          style: AppTextStyles.heading2.copyWith(
+            color: Colors.white,
+            fontSize: 20,
+          ),
         ),
+        const SizedBox(height: 2),
         Text(
           label,
-          style: AppTextStyles.bodySmall
-              .copyWith(color: Colors.white.withValues(alpha: 0.7)),
+          style: AppTextStyles.bodySmall.copyWith(
+            color: Colors.white.withValues(alpha: 0.8),
+            fontSize: 10,
+            letterSpacing: 0.5,
+          ),
         ),
       ],
     );
@@ -184,13 +193,13 @@ class _WeekRing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 110,
-      height: 110,
+      width: 120,
+      height: 120,
       child: Stack(
         alignment: Alignment.center,
         children: [
           CustomPaint(
-            size: const Size(110, 110),
+            size: const Size(120, 120),
             painter: _RingPainter(progress: progress),
           ),
           Column(
@@ -199,15 +208,23 @@ class _WeekRing extends StatelessWidget {
               Text(
                 'WEEK',
                 style: AppTextStyles.bodySmall.copyWith(
-                  color: Colors.white.withValues(alpha: 0.7),
+                  color: Colors.white.withValues(alpha: 0.8),
                   fontSize: 10,
+                  letterSpacing: 1,
                 ),
               ),
               Text(
                 '$week',
                 style: AppTextStyles.heading1.copyWith(
                   color: Colors.white,
-                  fontSize: 36,
+                  fontSize: 40,
+                ),
+              ),
+              Text(
+                '+3 day',
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: Colors.white.withValues(alpha: 0.8),
+                  fontSize: 11,
                 ),
               ),
             ],
@@ -221,72 +238,48 @@ class _WeekRing extends StatelessWidget {
 class _RingPainter extends CustomPainter {
   final double progress;
 
-  _RingPainter({required this.progress});
+  const _RingPainter({required this.progress});
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - 10) / 2;
+    final radius = (size.width - 12) / 2;
 
-    // Background ring
-    final bgPaint = Paint()
-      ..color = Colors.white.withValues(alpha: 0.24)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 8;
-    canvas.drawCircle(center, radius, bgPaint);
-
-    // Progress arc
-    final progressPaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 8
-      ..strokeCap = StrokeCap.round;
+    canvas.drawCircle(
+      center,
+      radius,
+      Paint()
+        ..color = Colors.white.withValues(alpha: 0.25)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 6,
+    );
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
-      -3.14 / 2,
-      2 * 3.14 * progress,
+      -3.14159 / 2,
+      2 * 3.14159 * progress,
       false,
-      progressPaint,
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 6
+        ..strokeCap = StrokeCap.round,
     );
   }
 
   @override
-  bool shouldRepaint(covariant _RingPainter old) => old.progress != progress;
+  bool shouldRepaint(covariant _RingPainter oldDelegate) =>
+      oldDelegate.progress != progress;
 }
 
 class _FeatureGrid extends StatelessWidget {
-  final List<_FeatureItem> features = const [
-    _FeatureItem(
-      title: 'Health report\nin PDF',
-      color: AppColors.cardBlue,
-      icon: Icons.health_and_safety,
-    ),
-    _FeatureItem(
-      title: 'Weight\nTracker',
-      color: AppColors.cardMint,
-      icon: Icons.monitor_weight,
-    ),
-    _FeatureItem(
-      title: 'Kick Counter',
-      color: AppColors.cardLavender,
-      icon: Icons.touch_app,
-    ),
-    _FeatureItem(
-      title: 'Contractions\nCalculator',
-      color: AppColors.cardPeach,
-      icon: Icons.timer,
-    ),
-    _FeatureItem(
-      title: 'Tummy\nGrowth',
-      color: AppColors.cardYellow,
-      icon: Icons.pregnant_woman,
-    ),
-    _FeatureItem(
-      title: 'Pressure\nMonitor',
-      color: AppColors.cardPink,
-      icon: Icons.favorite,
-    ),
+  final List<_FeatureItem> _items = const [
+    _FeatureItem(label: 'Medicines', icon: Icons.medication_outlined),
+    _FeatureItem(label: 'Exercises', icon: Icons.directions_walk_outlined),
+    _FeatureItem(label: 'Hospitals', icon: Icons.local_hospital_outlined),
+    _FeatureItem(label: 'Articles', icon: Icons.article_outlined),
+    _FeatureItem(label: 'Videos', icon: Icons.play_circle_outline),
+    _FeatureItem(label: 'Food', icon: Icons.restaurant_outlined),
   ];
 
   @override
@@ -298,52 +291,99 @@ class _FeatureGrid extends StatelessWidget {
         crossAxisCount: 2,
         crossAxisSpacing: AppSpacing.md,
         mainAxisSpacing: AppSpacing.md,
-        childAspectRatio: 1.35,
+        childAspectRatio: 1.3,
       ),
-      itemCount: features.length,
-      itemBuilder: (ctx, i) {
-        final feature = features[i];
-        return FeatureCard(
-          title: feature.title,
-          backgroundColor: feature.color,
-          icon: Icon(feature.icon,
-              color: Colors.white.withValues(alpha: 0.7), size: 36),
-          onTap: () {
-            // TODO: navigate to each feature screen
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                      '${feature.title.replaceAll('\n', ' ')} coming soon!')),
-            );
-          },
+      itemCount: _items.length,
+      itemBuilder: (context, i) => _FeatureCard(item: _items[i]),
+    );
+  }
+}
+
+class _FeatureCard extends StatelessWidget {
+  final _FeatureItem item;
+
+  const _FeatureCard({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${item.label} coming soon!')),
         );
       },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AppRadius.lg),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                item.icon,
+                color: AppColors.primary,
+                size: 24,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              item.label,
+              style: AppTextStyles.bodyMedium.copyWith(
+                fontWeight: FontWeight.w500,
+                color: AppColors.textDark,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class _FeatureItem {
-  final String title;
-  final Color color;
+  final String label;
   final IconData icon;
 
-  const _FeatureItem({
-    required this.title,
-    required this.color,
-    required this.icon,
-  });
+  const _FeatureItem({required this.label, required this.icon});
 }
 
 class _BottomNav extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  const _BottomNav({required this.currentIndex, required this.onTap});
+
+  static const _items = [
+    _NavItem(icon: Icons.home_rounded, label: 'Home'),
+    _NavItem(icon: Icons.people_outline, label: 'Social'),
+    _NavItem(icon: Icons.storefront_outlined, label: 'Shop'),
+    _NavItem(icon: Icons.person_outline, label: 'Profile'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 64,
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: Colors.black.withValues(alpha: 0.07),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -351,47 +391,37 @@ class _BottomNav extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _NavItem(icon: Icons.home_rounded, label: 'Home', isActive: true),
-          _NavItem(icon: Icons.favorite_border, label: 'Health'),
-          _NavItem(icon: Icons.chat_bubble_outline, label: 'Chat'),
-          _NavItem(icon: Icons.person_outline, label: 'Profile'),
-        ],
+        children: List.generate(_items.length, (i) {
+          final active = i == currentIndex;
+          return GestureDetector(
+            onTap: () => onTap(i),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  _items[i].icon,
+                  color: active ? AppColors.primary : AppColors.textLight,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  _items[i].label,
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: active ? AppColors.primary : AppColors.textLight,
+                    fontSize: 10,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
       ),
     );
   }
 }
 
-class _NavItem extends StatelessWidget {
+class _NavItem {
   final IconData icon;
   final String label;
-  final bool isActive;
 
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    this.isActive = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          icon,
-          color: isActive ? AppColors.primary : AppColors.textLight,
-          size: 24,
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: isActive ? AppColors.primary : AppColors.textLight,
-            fontSize: 10,
-          ),
-        ),
-      ],
-    );
-  }
+  const _NavItem({required this.icon, required this.label});
 }

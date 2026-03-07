@@ -8,6 +8,7 @@ import 'screens/auth/auth_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
 import 'screens/home/home_screen.dart';
+import 'screens/timeline/timeline_screen.dart';
 import 'services/auth_provider.dart';
 
 void main() {
@@ -35,6 +36,7 @@ class MamacitaApp extends StatelessWidget {
           AppRoutes.register: (_) => const RegisterScreen(),
           AppRoutes.onboarding: (_) => const OnboardingScreen(),
           AppRoutes.home: (_) => const HomeScreen(),
+          '/timeline': (_) => const TimelineScreen(),
         },
       ),
     );
