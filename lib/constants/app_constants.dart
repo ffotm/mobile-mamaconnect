@@ -1,11 +1,14 @@
-// lib/constants/app_constants.dart
-
 class AppRoutes {
   static const String splash = '/';
   static const String login = '/login';
   static const String register = '/register';
   static const String onboarding = '/onboarding';
   static const String home = '/home';
+  static const String timeline = '/timeline';
+  static const String logsHistory = '/logs-history';
+  static const String chatbot = '/chatbot';
+  static const String shop = '/shop';
+  static const String midwifeDashboard = '/midwife_dashboard';
 }
 
 class AppSpacing {

@@ -1,10 +1,7 @@
-// lib/screens/midwife_dashboard/midwife_dashboard_screen.dart
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
-
-// ── Mock data models ──────────────────────────────────────────────────────────
 
 class _Client {
   final String id;
@@ -45,7 +42,7 @@ class _Log {
 }
 
 class _Message {
-  final String sender; // 'client' or 'midwife'
+  final String sender;
   final String text;
   final String time;
   const _Message(
@@ -69,10 +66,8 @@ class _Request {
   });
 }
 
-// ── Mock data ────────────────────────────────────────────────────────────────
-
 final _mockClients = [
-  _Client(
+  const _Client(
     id: '1',
     name: 'Yasmine Bensalem',
     weekPregnant: 28,
@@ -103,7 +98,7 @@ final _mockClients = [
           time: '09:45'),
     ],
   ),
-  _Client(
+  const _Client(
     id: '2',
     name: 'Rania Cherif',
     weekPregnant: 34,
@@ -130,7 +125,7 @@ final _mockClients = [
           time: '11:00'),
     ],
   ),
-  _Client(
+  const _Client(
     id: '3',
     name: 'Amira Hadj',
     weekPregnant: 16,

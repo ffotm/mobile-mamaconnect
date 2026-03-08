@@ -19,6 +19,7 @@ import 'screens/history/logs_history_screen.dart';
 import 'screens/chatbot/chatbot_screen.dart';
 import 'services/auth_provider.dart';
 import 'screens/hospitals/hospitals_screens.dart';
+import 'screens/midwife_dashboard/midwife_dashboard_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ class MamacitaApp extends StatelessWidget {
           AppRoutes.register: (_) => const RegisterScreen(),
           AppRoutes.onboarding: (_) => const OnboardingScreen(),
           AppRoutes.home: (_) => const AppShell(),
+          AppRoutes.midwifeDashboard: (_) => const MidwifeDashboardScreen(),
           '/timeline': (_) => const TimelineScreen(),
           '/bluetooth': (_) => const BluetoothScreen(),
           '/monitor': (_) => const MonitorScreen(),
@@ -65,6 +67,7 @@ class MamacitaApp extends StatelessWidget {
               const PlaceholderRouteScreen(title: 'Recommended Diets'),
           '/workouts': (_) =>
               const PlaceholderRouteScreen(title: 'Workout Plans'),
+          '/midwife_dashboard': (_) => const MidwifeDashboardScreen(),
         },
       ),
     );

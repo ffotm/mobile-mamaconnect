@@ -8,6 +8,7 @@ import '../../widgets/custom_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../../services/auth_provider.dart';
 import 'register_screen.dart';
+import '../midwife_dashboard/midwife_dashboard_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -40,8 +41,11 @@ class _AuthScreenState extends State<AuthScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const SizedBox(height: AppSpacing.xl),
-                      const Text('Hello Mamacita',
-                          style: AppTextStyles.heading1),
+                      Text(
+                        'Hello Mamacita',
+                        style: AppTextStyles.heading1
+                            .copyWith(color: AppColors.primary),
+                      ),
                       const SizedBox(height: AppSpacing.xl),
                       AuthTabSwitcher(
                         activeIndex: _activeTab,
@@ -106,7 +110,11 @@ class _LoginFormState extends State<_LoginForm> {
     );
     if (!mounted) return;
     if (success) {
-      Navigator.pushReplacementNamed(context, AppRoutes.home);
+      if (_emailController.text.trim() == "midwife@example.com") {
+        Navigator.pushReplacementNamed(context, AppRoutes.midwifeDashboard);
+      } else {
+        Navigator.pushReplacementNamed(context, AppRoutes.home);
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

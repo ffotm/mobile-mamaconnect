@@ -75,9 +75,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: AppSpacing.xl),
-                      const Center(
+                      Center(
                         child: Text('Hello Mamacita',
-                            style: AppTextStyles.heading1),
+                            style: AppTextStyles.heading1
+                                .copyWith(color: AppColors.primary)),
                       ),
                       const SizedBox(height: AppSpacing.xl),
                       AuthTabSwitcher(
