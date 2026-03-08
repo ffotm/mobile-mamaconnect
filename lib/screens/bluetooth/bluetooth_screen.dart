@@ -361,7 +361,7 @@ class _ConnectedView extends StatelessWidget {
                     style: AppTextStyles.bodyLarge
                         .copyWith(fontWeight: FontWeight.w600)),
                 const SizedBox(height: AppSpacing.md),
-                _DeviceInfoRow(
+                const _DeviceInfoRow(
                   icon: Icons.battery_full,
                   iconColor: Colors.green,
                   label: 'Battery',

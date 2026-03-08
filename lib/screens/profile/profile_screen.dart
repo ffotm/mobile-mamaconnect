@@ -9,7 +9,9 @@ import '../../widgets/primary_button.dart';
 import '../../services/auth_provider.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final bool showBackButton;
+
+  const ProfileScreen({super.key, this.showBackButton = true});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -77,10 +79,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: widget.showBackButton
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        automaticallyImplyLeading: widget.showBackButton,
         title: Text('My Profile', style: AppTextStyles.heading3),
         centerTitle: true,
         actions: [

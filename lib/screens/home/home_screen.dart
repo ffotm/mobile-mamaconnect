@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
-import '../../services/auth_provider.dart';
 import '../timeline/timeline_screen.dart';
 import '../bluetooth/bluetooth_screen.dart';
 import '../alerts/alerts_screen.dart';
-import '../midwives/midwives_screen.dart';
-import '../profile/profile_screen.dart';
-import '../shop/shop_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,12 +18,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final int _daysToGo = 228;
   final double _progress = 0.189;
 
-  int _bottomNavIndex = 0;
-
   void _onVerticalDragEnd(DragEndDetails details) {
     final velocity = details.primaryVelocity ?? 0;
 
-    // Pull DOWN → open timeline
     if (velocity > 500) {
       Navigator.push(
         context,
@@ -43,9 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onVerticalDragEnd: _onVerticalDragEnd,
-      child: Scaffold(
-        backgroundColor: AppColors.background,
-        body: Column(
+      child: Container(
+        color: AppColors.background,
+        child: Column(
           children: [
             // Header
             _HeaderSection(
@@ -98,31 +90,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // Logout Button
+            // Chatbot Button
             Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: AppSpacing.sm,
                 horizontal: AppSpacing.md,
               ),
               child: GestureDetector(
-                onTap: () => context.read<AuthProvider>().logout().then(
-                      (_) => Navigator.pushReplacementNamed(
-                        context,
-                        AppRoutes.login,
-                      ),
-                    ),
+                onTap: () => Navigator.pushNamed(context, '/chatbot'),
                 child: const CircleAvatar(
                   radius: 24,
                   backgroundColor: AppColors.primary,
-                  child: Icon(Icons.logout, color: Colors.white, size: 20),
+                  child: Icon(Icons.smart_toy_outlined,
+                      color: Colors.white, size: 20),
                 ),
               ),
             ),
           ],
-        ),
-        bottomNavigationBar: _BottomNav(
-          currentIndex: _bottomNavIndex,
-          onTap: (i) => setState(() => _bottomNavIndex = i),
         ),
       ),
     );
@@ -371,12 +355,13 @@ class _RingPainter extends CustomPainter {
 
 class _FeatureGrid extends StatelessWidget {
   final List<_FeatureItem> _items = const [
-    _FeatureItem(label: 'Medicines', icon: Icons.medication_outlined),
-    _FeatureItem(label: 'Exercises', icon: Icons.directions_walk_outlined),
-    _FeatureItem(label: 'Hospitals', icon: Icons.local_hospital_outlined),
-    _FeatureItem(label: 'Articles', icon: Icons.article_outlined),
-    _FeatureItem(label: 'Videos', icon: Icons.play_circle_outline),
-    _FeatureItem(label: 'Food', icon: Icons.restaurant_outlined),
+    _FeatureItem(label: 'Safe Medicines', icon: Icons.medication_outlined),
+    _FeatureItem(
+        label: 'Hospitals nearby', icon: Icons.local_hospital_outlined),
+    _FeatureItem(label: 'log history', icon: Icons.article_outlined),
+    _FeatureItem(label: 'symptoms tracker', icon: Icons.play_circle_outline),
+    _FeatureItem(label: 'recommended diets', icon: Icons.restaurant_outlined),
+    _FeatureItem(label: 'Workout plans', icon: Icons.directions_walk_outlined),
   ];
 
   @override
@@ -405,6 +390,11 @@ class _FeatureCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        final route = _routeForFeature(item.label);
+        if (route != null) {
+          Navigator.pushNamed(context, route);
+          return;
+        }
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${item.label} coming soon!')),
         );
@@ -459,111 +449,21 @@ class _FeatureItem {
   const _FeatureItem({required this.label, required this.icon});
 }
 
-class _BottomNav extends StatelessWidget {
-  final int currentIndex;
-  final ValueChanged<int> onTap;
-
-  const _BottomNav({required this.currentIndex, required this.onTap});
-
-  static const _items = [
-    _NavItem(icon: Icons.home_rounded, label: 'Home'),
-    _NavItem(icon: Icons.people_outline, label: 'Social'),
-    _NavItem(icon: Icons.storefront_outlined, label: 'Shop'),
-    _NavItem(icon: Icons.person_outline, label: 'Profile'),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 64,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        _NavTile(
-            icon: Icons.home_rounded,
-            label: 'Home',
-            active: currentIndex == 0,
-            onTap: () {
-              onTap(0);
-            }),
-        _NavTile(
-            icon: Icons.people_outline,
-            label: 'Social',
-            active: currentIndex == 1,
-            onTap: () {
-              onTap(1);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const MidwivesScreen()));
-            }),
-        _NavTile(
-            icon: Icons.storefront_outlined,
-            label: 'Shop',
-            active: currentIndex == 2,
-            onTap: () {
-              onTap(2);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const ShopScreen()));
-            }),
-        _NavTile(
-            icon: Icons.person_outline,
-            label: 'Profile',
-            active: currentIndex == 3,
-            onTap: () {
-              onTap(3);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const ProfileScreen()));
-            }),
-      ]),
-    );
+String? _routeForFeature(String label) {
+  switch (label.toLowerCase()) {
+    case 'safe medicines':
+      return '/medicines';
+    case 'hospitals nearby':
+      return '/hospitals';
+    case 'log history':
+      return '/logs-history';
+    case 'symptoms tracker':
+      return '/symptoms';
+    case 'recommended diets':
+      return '/diets';
+    case 'workout plans':
+      return '/workouts';
+    default:
+      return null;
   }
-}
-
-class _NavTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool active;
-  final VoidCallback onTap;
-
-  const _NavTile({
-    required this.icon,
-    required this.label,
-    required this.active,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon,
-              color: active ? AppColors.primary : AppColors.textLight,
-              size: 24),
-          const SizedBox(height: 2),
-          Text(label,
-              style: AppTextStyles.bodySmall.copyWith(
-                color: active ? AppColors.primary : AppColors.textLight,
-                fontSize: 10,
-              )),
-        ],
-      ),
-    );
-  }
-}
-
-class _NavItem {
-  final IconData icon;
-  final String label;
-
-  const _NavItem({required this.icon, required this.label});
 }

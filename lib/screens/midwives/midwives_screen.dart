@@ -94,7 +94,9 @@ const _midwives = [
 ];
 
 class MidwivesScreen extends StatefulWidget {
-  const MidwivesScreen({super.key});
+  final bool showBackButton;
+
+  const MidwivesScreen({super.key, this.showBackButton = true});
 
   @override
   State<MidwivesScreen> createState() => _MidwivesScreenState();
@@ -120,10 +122,13 @@ class _MidwivesScreenState extends State<MidwivesScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: widget.showBackButton
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        automaticallyImplyLeading: widget.showBackButton,
         title: Text('Midwives', style: AppTextStyles.heading3),
         centerTitle: true,
       ),

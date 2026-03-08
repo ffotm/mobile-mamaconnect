@@ -6,7 +6,7 @@ import 'screens/splash_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
-import 'screens/home/home_screen.dart';
+import 'screens/shell/app_shell.dart';
 import 'screens/timeline/timeline_screen.dart';
 import 'screens/bluetooth/bluetooth_screen.dart';
 import 'screens/monitor/monitor_screen.dart';
@@ -14,8 +14,9 @@ import 'screens/graphs/graphs_screen.dart';
 import 'screens/alerts/alerts_screen.dart';
 import 'screens/midwives/midwives_screen.dart';
 import 'screens/profile/profile_screen.dart';
-import 'screens/contact/contact_screen.dart';
 import 'screens/shop/shop_screen.dart';
+import 'screens/history/logs_history_screen.dart';
+import 'screens/chatbot/chatbot_screen.dart';
 import 'services/auth_provider.dart';
 
 void main() {
@@ -42,16 +43,28 @@ class MamacitaApp extends StatelessWidget {
           AppRoutes.login: (_) => const AuthScreen(),
           AppRoutes.register: (_) => const RegisterScreen(),
           AppRoutes.onboarding: (_) => const OnboardingScreen(),
-          AppRoutes.home: (_) => const HomeScreen(),
+          AppRoutes.home: (_) => const AppShell(),
           '/timeline': (_) => const TimelineScreen(),
           '/bluetooth': (_) => const BluetoothScreen(),
           '/monitor': (_) => const MonitorScreen(),
           '/graphs': (_) =>
-              GraphsScreen(heartbeatHistory: const [140, 142, 138, 145]),
+              const GraphsScreen(heartbeatHistory: [140, 142, 138, 145]),
           '/alerts': (_) => const AlertsScreen(),
           '/midwives': (_) => const MidwivesScreen(),
           '/profile': (_) => const ProfileScreen(),
           '/shop': (_) => const ShopScreen(),
+          '/logs-history': (_) => const LogsHistoryScreen(),
+          '/chatbot': (_) => const ChatbotScreen(),
+          '/medicines': (_) =>
+              const PlaceholderRouteScreen(title: 'Safe Medicines'),
+          '/hospitals': (_) =>
+              const PlaceholderRouteScreen(title: 'Hospitals Nearby'),
+          '/symptoms': (_) =>
+              const PlaceholderRouteScreen(title: 'Symptoms Tracker'),
+          '/diets': (_) =>
+              const PlaceholderRouteScreen(title: 'Recommended Diets'),
+          '/workouts': (_) =>
+              const PlaceholderRouteScreen(title: 'Workout Plans'),
         },
       ),
     );
@@ -94,6 +107,25 @@ class MamacitaApp extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.white,
+      ),
+    );
+  }
+}
+
+class PlaceholderRouteScreen extends StatelessWidget {
+  final String title;
+
+  const PlaceholderRouteScreen({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Center(
+        child: Text(
+          '$title - Coming Soon',
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }

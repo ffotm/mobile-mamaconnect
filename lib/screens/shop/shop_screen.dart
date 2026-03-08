@@ -6,7 +6,9 @@ import '../../constants/app_constants.dart';
 import '../../widgets/primary_button.dart';
 
 class ShopScreen extends StatefulWidget {
-  const ShopScreen({super.key});
+  final bool showBackButton;
+
+  const ShopScreen({super.key, this.showBackButton = true});
 
   @override
   State<ShopScreen> createState() => _ShopScreenState();
@@ -71,10 +73,13 @@ class _ShopScreenState extends State<ShopScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.background,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
-          onPressed: () => Navigator.pop(context),
-        ),
+        leading: widget.showBackButton
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+                onPressed: () => Navigator.pop(context),
+              )
+            : null,
+        automaticallyImplyLeading: widget.showBackButton,
         title: Text('Shop', style: AppTextStyles.heading3),
         centerTitle: true,
         actions: [
