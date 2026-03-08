@@ -18,6 +18,7 @@ import 'screens/shop/shop_screen.dart';
 import 'screens/history/logs_history_screen.dart';
 import 'screens/chatbot/chatbot_screen.dart';
 import 'services/auth_provider.dart';
+import 'screens/hospitals/hospitals_screens.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,8 +58,7 @@ class MamacitaApp extends StatelessWidget {
           '/chatbot': (_) => const ChatbotScreen(),
           '/medicines': (_) =>
               const PlaceholderRouteScreen(title: 'Safe Medicines'),
-          '/hospitals': (_) =>
-              const PlaceholderRouteScreen(title: 'Hospitals Nearby'),
+          '/hospitals': (_) => const HospitalsScreen(),
           '/symptoms': (_) =>
               const PlaceholderRouteScreen(title: 'Symptoms Tracker'),
           '/diets': (_) =>
