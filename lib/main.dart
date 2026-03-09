@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mamacita/screens/diet/diet_screen.dart';
+import 'package:mamacita/screens/history/logs_history_screen.dart';
+import 'package:mamacita/screens/medicines/medicines_screens.dart';
+import 'package:mamacita/screens/symptom_tracker/symptom_tracker_screen.dart';
+import 'package:mamacita/screens/workouts/workouts_screen.dart';
 import 'package:provider/provider.dart';
 import 'constants/app_colors.dart';
 import 'constants/app_constants.dart';
@@ -6,7 +11,9 @@ import 'screens/splash_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
+import 'screens/home/home_screen.dart';
 import 'screens/shell/app_shell.dart';
+import 'screens/chatbot/chatbot_screen.dart';
 import 'screens/timeline/timeline_screen.dart';
 import 'screens/bluetooth/bluetooth_screen.dart';
 import 'screens/monitor/monitor_screen.dart';
@@ -14,9 +21,8 @@ import 'screens/graphs/graphs_screen.dart';
 import 'screens/alerts/alerts_screen.dart';
 import 'screens/midwives/midwives_screen.dart';
 import 'screens/profile/profile_screen.dart';
+import 'screens/contact/contact_screen.dart';
 import 'screens/shop/shop_screen.dart';
-import 'screens/history/logs_history_screen.dart';
-import 'screens/chatbot/chatbot_screen.dart';
 import 'services/auth_provider.dart';
 import 'screens/hospitals/hospitals_screens.dart';
 import 'screens/midwife_dashboard/midwife_dashboard_screen.dart';
@@ -47,6 +53,7 @@ class MamacitaApp extends StatelessWidget {
           AppRoutes.onboarding: (_) => const OnboardingScreen(),
           AppRoutes.home: (_) => const AppShell(),
           AppRoutes.midwifeDashboard: (_) => const MidwifeDashboardScreen(),
+          AppRoutes.chatbot: (_) => const ChatbotScreen(),
           '/timeline': (_) => const TimelineScreen(),
           '/bluetooth': (_) => const BluetoothScreen(),
           '/monitor': (_) => const MonitorScreen(),
@@ -56,18 +63,12 @@ class MamacitaApp extends StatelessWidget {
           '/midwives': (_) => const MidwivesScreen(),
           '/profile': (_) => const ProfileScreen(),
           '/shop': (_) => const ShopScreen(),
-          '/logs-history': (_) => const LogsHistoryScreen(),
-          '/chatbot': (_) => const ChatbotScreen(),
-          '/medicines': (_) =>
-              const PlaceholderRouteScreen(title: 'Safe Medicines'),
+          '/logs': (_) => const LogsHistoryScreen(),
+          '/medicines': (_) => const MedicinesScreen(),
+          '/diet': (_) => const DietScreen(),
+          '/workouts': (_) => const WorkoutsScreen(),
+          '/symptoms': (_) => const SymptomTrackerScreen(),
           '/hospitals': (_) => const HospitalsScreen(),
-          '/symptoms': (_) =>
-              const PlaceholderRouteScreen(title: 'Symptoms Tracker'),
-          '/diets': (_) =>
-              const PlaceholderRouteScreen(title: 'Recommended Diets'),
-          '/workouts': (_) =>
-              const PlaceholderRouteScreen(title: 'Workout Plans'),
-          '/midwife_dashboard': (_) => const MidwifeDashboardScreen(),
         },
       ),
     );
@@ -110,25 +111,6 @@ class MamacitaApp extends StatelessWidget {
         ),
         filled: true,
         fillColor: Colors.white,
-      ),
-    );
-  }
-}
-
-class PlaceholderRouteScreen extends StatelessWidget {
-  final String title;
-
-  const PlaceholderRouteScreen({super.key, required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text(
-          '$title - Coming Soon',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
       ),
     );
   }

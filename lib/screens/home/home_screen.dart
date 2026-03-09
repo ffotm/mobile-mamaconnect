@@ -1,469 +1,439 @@
+// lib/screens/home/home_screen.dart
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
-import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
 import '../timeline/timeline_screen.dart';
 import '../bluetooth/bluetooth_screen.dart';
 import '../alerts/alerts_screen.dart';
 
+// ─────────────────────────────────────────────────────────────────────────────
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final int _currentWeek = 7;
+  final int _week = 7;
   final int _daysToGo = 228;
   final double _progress = 0.189;
 
-  void _onVerticalDragEnd(DragEndDetails details) {
-    final velocity = details.primaryVelocity ?? 0;
-
-    if (velocity > 500) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const TimelineScreen(),
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onVerticalDragEnd: _onVerticalDragEnd,
-      child: Container(
-        color: AppColors.background,
-        child: Column(
-          children: [
-            // Header
-            _HeaderSection(
-              currentWeek: _currentWeek,
-              daysToGo: _daysToGo,
-              progress: _progress,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.md, AppSpacing.md, AppSpacing.md, 0),
-              child: Row(
-                children: [
-                  _QuickAction(
-                    icon: Icons.bluetooth,
-                    label: 'Connect',
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const BluetoothScreen())),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  _QuickAction(
-                    icon: Icons.notifications_outlined,
-                    label: 'Alerts',
-                    badge: true,
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const AlertsScreen())),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  _QuickAction(
-                    icon: Icons.timeline,
-                    label: 'Timeline',
-                    onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const TimelineScreen())),
-                  ),
-                ],
-              ),
-            ),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8EFEC),
+      body: Stack(
+        children: [
+          Column(
+            children: [
 
-            const SizedBox(height: AppSpacing.sm),
-            // Feature Grid
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                child: _FeatureGrid(),
-              ),
-            ),
+              // ── Wave hero ────────────────────────────────────────────────
+              _WaveHero(week: _week, daysToGo: _daysToGo, progress: _progress),
 
-            // Chatbot Button
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: AppSpacing.sm,
-                horizontal: AppSpacing.md,
+              // ── Quick actions row ────────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+                child: Row(children: [
+                  _QBtn(
+                      icon: Icons.bluetooth_rounded,
+                      label: 'Connect',
+                      onTap: () => _push(const BluetoothScreen())),
+                  const SizedBox(width: 10),
+                  _QBtn(
+                      icon: Icons.notifications_outlined,
+                      label: 'Alerts',
+                      badge: true,
+                      onTap: () => _push(const AlertsScreen())),
+                  const SizedBox(width: 10),
+                  _QBtn(
+                      icon: Icons.view_timeline_outlined,
+                      label: 'Timeline',
+                      onTap: () => _push(const TimelineScreen())),
+                ]),
               ),
-              child: GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/chatbot'),
-                child: const CircleAvatar(
-                  radius: 24,
-                  backgroundColor: AppColors.primary,
-                  child: Icon(Icons.smart_toy_outlined,
-                      color: Colors.white, size: 20),
+
+              const SizedBox(height: 14),
+
+              // ── Feature grid ─────────────────────────────────────────────
+              const Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(20, 0, 16, 20),
+                  child: _Grid(),
+                ),
+              ),
+            ],
+          ),
+
+          // ── Chatbot button (fixed at bottom) ─────────────────────────
+          Positioned(
+            left: 16,
+            right: 16,
+            bottom: 30,
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, AppRoutes.chatbot),
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFFEB7155), Color(0xFFCC3D22)],
+                  ),
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFFCC3D22).withValues(alpha: 0.3),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.chat_bubble_outline,
+                        color: Colors.white, size: 16),
+                    SizedBox(width: 8),
+                    Text(
+                      'Chat with AI Assistant',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+  }
+
+  void _push(Widget screen) =>
+      Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Wave Hero
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _WaveHero extends StatelessWidget {
+  final int week, daysToGo;
+  final double progress;
+  const _WaveHero(
+      {required this.week, required this.daysToGo, required this.progress});
+
+  @override
+  Widget build(BuildContext context) {
+    final top = MediaQuery.of(context).padding.top;
+    return SizedBox(
+      width: double.infinity,
+      height: top + 250,
+      child: Stack(children: [
+        // ── gradient fill clipped to wave ─────────────────────────────
+        ClipPath(
+          clipper: _WaveClipper(),
+          child: Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                // vivid warm coral → deep brick — matches reference exactly
+                colors: [Color(0xFFEB7155), Color(0xFFCC3D22)],
+              ),
+            ),
+          ),
+        ),
+
+        // ── content ───────────────────────────────────────────────────
+        Positioned(
+          top: top + 40,
+          left: 24,
+          right: 24,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _Stat(
+                  value: '${(progress * 100).toStringAsFixed(1)}%',
+                  sub: 'DONE'),
+              _Ring(week: week, progress: progress),
+              _Stat(value: '$daysToGo', sub: 'DAYS TO GO'),
+            ],
+          ),
+        ),
+
+        // ── swipe hint ─────────────────────────────────────────────
+        Positioned(
+          bottom: 32,
+          left: 0,
+          right: 0,
+          child: Center(
+              child: Icon(Icons.keyboard_arrow_down_rounded,
+                  color: Colors.white.withValues(alpha: 0.6), size: 26)),
+        ),
+      ]),
     );
   }
 }
 
-class _QuickAction extends StatelessWidget {
+/// Produces a smooth single wave — matching the reference screenshot.
+class _WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size s) {
+    final p = Path()..lineTo(0, s.height - 60);
+
+    // single smooth wave that dips down in the middle
+    p.quadraticBezierTo(
+      s.width * 0.5, // control point X (middle)
+      s.height + 10, // control point Y (dip down)
+      s.width, // end point X (right edge)
+      s.height - 60, // end point Y (same height as start)
+    );
+
+    p.lineTo(s.width, 0);
+    p.close();
+    return p;
+  }
+
+  @override
+  bool shouldReclip(_) => false;
+}
+
+class _Stat extends StatelessWidget {
+  final String value, sub;
+  const _Stat({required this.value, required this.sub});
+  @override
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(value,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Poppins')),
+          const SizedBox(height: 2),
+          Text(sub,
+              style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.78),
+                  fontSize: 10,
+                  letterSpacing: 1.3,
+                  fontFamily: 'Poppins')),
+        ],
+      );
+}
+
+class _Ring extends StatelessWidget {
+  final int week;
+  final double progress;
+  const _Ring({required this.week, required this.progress});
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        width: 132,
+        height: 132,
+        child: Stack(alignment: Alignment.center, children: [
+          CustomPaint(
+              size: const Size(132, 132), painter: _RingPaint(progress)),
+          Column(mainAxisSize: MainAxisSize.min, children: [
+            Text('WEEK',
+                style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.78),
+                    fontSize: 10,
+                    letterSpacing: 1.5,
+                    fontFamily: 'Poppins')),
+            Text('$week',
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 48,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Poppins',
+                    height: 1.0)),
+            Text('+3 day',
+                style: TextStyle(
+                    color: Colors.white.withValues(alpha: 0.72),
+                    fontSize: 11,
+                    fontFamily: 'Poppins')),
+          ]),
+        ]),
+      );
+}
+
+class _RingPaint extends CustomPainter {
+  final double progress;
+  const _RingPaint(this.progress);
+  @override
+  void paint(Canvas canvas, Size s) {
+    final c = s.center(Offset.zero);
+    final r = (s.width - 14) / 2;
+    // track
+    canvas.drawCircle(
+        c,
+        r,
+        Paint()
+          ..color = Colors.white.withValues(alpha: 0.28)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 7);
+    // arc
+    canvas.drawArc(
+        Rect.fromCircle(center: c, radius: r),
+        -math.pi / 2,
+        2 * math.pi * progress,
+        false,
+        Paint()
+          ..color = Colors.white
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 7
+          ..strokeCap = StrokeCap.round);
+  }
+
+  @override
+  bool shouldRepaint(covariant _RingPaint o) => o.progress != progress;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Quick-action bar
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _QBtn extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool badge;
   final VoidCallback onTap;
-
-  const _QuickAction({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.badge = false,
-  });
+  const _QBtn(
+      {required this.icon,
+      required this.label,
+      required this.onTap,
+      this.badge = false});
 
   @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: AppColors.divider),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Icon(icon, color: AppColors.primary, size: 18),
-                  if (badge)
-                    Positioned(
+  Widget build(BuildContext context) => Expanded(
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                    color: const Color(0xFFCC3D22).withValues(alpha: 0.07),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2))
+              ],
+            ),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Stack(clipBehavior: Clip.none, children: [
+                Icon(icon, color: AppColors.primary, size: 17),
+                if (badge)
+                  Positioned(
                       top: -3,
                       right: -3,
                       child: Container(
-                        width: 7,
-                        height: 7,
-                        decoration: const BoxDecoration(
-                            shape: BoxShape.circle, color: Colors.red),
-                      ),
-                    ),
-                ],
-              ),
+                          width: 7,
+                          height: 7,
+                          decoration: const BoxDecoration(
+                              shape: BoxShape.circle, color: Colors.red))),
+              ]),
               const SizedBox(width: 6),
               Text(label,
-                  style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.textDark, fontWeight: FontWeight.w500)),
-            ],
+                  style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF2D2D2D),
+                      fontFamily: 'Poppins')),
+            ]),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
-class _HeaderSection extends StatelessWidget {
-  final int currentWeek;
-  final int daysToGo;
-  final double progress;
+// ─────────────────────────────────────────────────────────────────────────────
+// Feature grid
+// ─────────────────────────────────────────────────────────────────────────────
 
-  const _HeaderSection({
-    required this.currentWeek,
-    required this.daysToGo,
-    required this.progress,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFFE8856A), Color(0xFFD4614A)],
-        ),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(32),
-          bottomRight: Radius.circular(32),
-        ),
-      ),
-      padding: const EdgeInsets.only(
-        top: 56,
-        left: AppSpacing.lg,
-        right: AppSpacing.lg,
-        bottom: AppSpacing.lg,
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _StatItem(
-                value: '${(progress * 100).toStringAsFixed(1)}%',
-                label: 'DONE',
-              ),
-              _WeekRing(
-                week: currentWeek,
-                progress: progress,
-              ),
-              _StatItem(
-                value: '$daysToGo',
-                label: 'DAYS TO GO',
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          Icon(
-            Icons.keyboard_arrow_down,
-            color: Colors.white.withValues(alpha: 0.8),
-            size: 28,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatItem extends StatelessWidget {
-  final String value;
-  final String label;
-
-  const _StatItem({required this.value, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: AppTextStyles.heading2.copyWith(
-            color: Colors.white,
-            fontSize: 20,
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: Colors.white.withValues(alpha: 0.8),
-            fontSize: 10,
-            letterSpacing: 0.5,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _WeekRing extends StatelessWidget {
-  final int week;
-  final double progress;
-
-  const _WeekRing({required this.week, required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 120,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CustomPaint(
-            size: const Size(120, 120),
-            painter: _RingPainter(progress: progress),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'WEEK',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: Colors.white.withValues(alpha: 0.8),
-                  fontSize: 10,
-                  letterSpacing: 1,
-                ),
-              ),
-              Text(
-                '$week',
-                style: AppTextStyles.heading1.copyWith(
-                  color: Colors.white,
-                  fontSize: 40,
-                ),
-              ),
-              Text(
-                '+3 day',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: Colors.white.withValues(alpha: 0.8),
-                  fontSize: 11,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _RingPainter extends CustomPainter {
-  final double progress;
-
-  const _RingPainter({required this.progress});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - 12) / 2;
-
-    canvas.drawCircle(
-      center,
-      radius,
-      Paint()
-        ..color = Colors.white.withValues(alpha: 0.25)
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 6,
-    );
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      -3.14159 / 2,
-      2 * 3.14159 * progress,
-      false,
-      Paint()
-        ..color = Colors.white
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 6
-        ..strokeCap = StrokeCap.round,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant _RingPainter oldDelegate) =>
-      oldDelegate.progress != progress;
-}
-
-class _FeatureGrid extends StatelessWidget {
-  final List<_FeatureItem> _items = const [
-    _FeatureItem(label: 'Safe Medicines', icon: Icons.medication_outlined),
-    _FeatureItem(
-        label: 'Hospitals nearby', icon: Icons.local_hospital_outlined),
-    _FeatureItem(label: 'log history', icon: Icons.article_outlined),
-    _FeatureItem(label: 'symptoms tracker', icon: Icons.play_circle_outline),
-    _FeatureItem(label: 'recommended diets', icon: Icons.restaurant_outlined),
-    _FeatureItem(label: 'Workout plans', icon: Icons.directions_walk_outlined),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: AppSpacing.md,
-        mainAxisSpacing: AppSpacing.md,
-        childAspectRatio: 1.3,
-      ),
-      itemCount: _items.length,
-      itemBuilder: (context, i) => _FeatureCard(item: _items[i]),
-    );
-  }
-}
-
-class _FeatureCard extends StatelessWidget {
-  final _FeatureItem item;
-
-  const _FeatureCard({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        final route = _routeForFeature(item.label);
-        if (route != null) {
-          Navigator.pushNamed(context, route);
-          return;
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('${item.label} coming soon!')),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                item.icon,
-                color: AppColors.primary,
-                size: 24,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              item.label,
-              style: AppTextStyles.bodyMedium.copyWith(
-                fontWeight: FontWeight.w500,
-                color: AppColors.textDark,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FeatureItem {
+class _Cell {
   final String label;
   final IconData icon;
-
-  const _FeatureItem({required this.label, required this.icon});
+  final Color color;
+  final String route;
+  const _Cell(this.label, this.icon, this.color, this.route);
 }
 
-String? _routeForFeature(String label) {
-  switch (label.toLowerCase()) {
-    case 'safe medicines':
-      return '/medicines';
-    case 'hospitals nearby':
-      return '/hospitals';
-    case 'log history':
-      return '/logs-history';
-    case 'symptoms tracker':
-      return '/symptoms';
-    case 'recommended diets':
-      return '/diets';
-    case 'workout plans':
-      return '/workouts';
-    default:
-      return null;
-  }
+const _cells = [
+  _Cell('Safe Medicines', Icons.medication_outlined, Color(0xFF5B8DEF),
+      '/medicines'),
+  _Cell('Hospitals Nearby', Icons.local_hospital_outlined, Color(0xFFEB7155),
+      '/hospitals'),
+  _Cell('Log History', Icons.bar_chart_rounded, Color(0xFF8B5CF6), '/logs'),
+  _Cell('Symptom Tracker', Icons.favorite_border_rounded, Color(0xFFE84393),
+      '/symptoms'),
+  _Cell('Recommended Diets', Icons.restaurant_outlined, Color(0xFF10B981),
+      '/diet'),
+  _Cell('Workout Plans', Icons.directions_run_rounded, Color(0xFFF59E0B),
+      '/workouts'),
+];
+
+class _Grid extends StatelessWidget {
+  const _Grid();
+  @override
+  Widget build(BuildContext context) => GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 1.6,
+        ),
+        itemCount: _cells.length,
+        itemBuilder: (ctx, i) => _Tile(_cells[i]),
+      );
+}
+
+class _Tile extends StatelessWidget {
+  final _Cell cell;
+  const _Tile(this.cell);
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+        onTap: () => Navigator.pushNamed(context, cell.route),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                  color: cell.color.withValues(alpha: 0.12),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3))
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          child: Row(children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                color: cell.color.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(cell.icon, color: cell.color, size: 22),
+            ),
+            const SizedBox(width: 11),
+            Expanded(
+                child: Text(cell.label,
+                    style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF2A2A2A),
+                        height: 1.25,
+                        fontFamily: 'Poppins'))),
+          ]),
+        ),
+      );
 }
