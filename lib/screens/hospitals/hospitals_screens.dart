@@ -227,13 +227,13 @@ class _HospitalsScreenState extends State<HospitalsScreen> {
           // ── Hospital list ────────────────────────────────────────────────
           Expanded(
             child: _filtered.isEmpty
-                ? Center(
+                ? const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.local_hospital_outlined,
+                        Icon(Icons.local_hospital_outlined,
                             size: 48, color: AppColors.textLight),
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(height: AppSpacing.md),
                         Text('No hospitals found',
                             style: AppTextStyles.bodyMedium),
                       ],
@@ -394,10 +394,10 @@ class _HospitalCard extends StatelessWidget {
             Row(
               children: [
                 if (hospital.hasMaternity)
-                  _Tag(label: '🤱 Maternity', color: Colors.purple),
+                  const _Tag(label: '🤱 Maternity', color: Colors.purple),
                 if (hospital.hasMaternity) const SizedBox(width: 6),
                 if (hospital.isOpen24h)
-                  _Tag(label: '🕐 Open 24h', color: Colors.green),
+                  const _Tag(label: '🕐 Open 24h', color: Colors.green),
               ],
             ),
 

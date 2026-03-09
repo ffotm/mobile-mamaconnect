@@ -119,7 +119,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Alerts', style: AppTextStyles.heading3),
+            const Text('Alerts', style: AppTextStyles.heading3),
             if (_unreadCount > 0) ...[
               const SizedBox(width: AppSpacing.sm),
               Container(
@@ -186,13 +186,13 @@ class _AlertsScreenState extends State<AlertsScreen> {
           // Alert list
           Expanded(
             child: _filtered.isEmpty
-                ? Center(
+                ? const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.notifications_none,
+                        Icon(Icons.notifications_none,
                             size: 48, color: AppColors.textLight),
-                        const SizedBox(height: AppSpacing.md),
+                        SizedBox(height: AppSpacing.md),
                         Text('No alerts', style: AppTextStyles.bodyMedium),
                       ],
                     ),

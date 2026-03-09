@@ -202,7 +202,7 @@ class _MidwifeDashboardScreenState extends State<MidwifeDashboardScreen>
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Midwife Dashboard', style: AppTextStyles.heading3),
+            const Text('Midwife Dashboard', style: AppTextStyles.heading3),
             Text('Dr. Sarah Benali',
                 style: AppTextStyles.bodySmall
                     .copyWith(color: AppColors.textLight)),
@@ -491,14 +491,14 @@ class _RequestsTab extends StatelessWidget {
               (r) => _RequestCard(request: r, onAccept: null, onDecline: null)),
         ],
         if (pending.isEmpty && accepted.isEmpty)
-          Center(
+          const Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 80),
+              padding: EdgeInsets.only(top: 80),
               child: Column(
                 children: [
-                  const Icon(Icons.inbox_outlined,
+                  Icon(Icons.inbox_outlined,
                       size: 48, color: AppColors.textLight),
-                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(height: AppSpacing.md),
                   Text('No requests', style: AppTextStyles.bodyMedium),
                 ],
               ),

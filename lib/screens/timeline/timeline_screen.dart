@@ -4,6 +4,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
 import '../../widgets/next_appointment_alert.dart';
+import '../midwives/midwives_screen.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants — change these to match actual patient data
@@ -80,7 +81,7 @@ final List<_Entry> _timelineEntries = [
         'Folic acid taken before conception and through week 12 reduces neural tube defect risk by 70%.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 2,
     title: 'Week 2',
@@ -101,7 +102,7 @@ final List<_Entry> _timelineEntries = [
         'Sperm survive 3–5 days — conception is most likely if you have intercourse in the 5 days before ovulation.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 3,
     title: 'Week 3',
@@ -123,7 +124,7 @@ final List<_Entry> _timelineEntries = [
         'Implantation spotting at days 6–12 post-ovulation is normal. It is lighter and shorter than a period.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 4,
     title: 'Week 4',
@@ -144,7 +145,7 @@ final List<_Entry> _timelineEntries = [
         'Home tests are most accurate from the first day of your missed period. A blood test can detect pregnancy 1–2 days earlier.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '📋 Confirm Pregnancy',
     dayRange: 'Recommended at Week 4–6',
@@ -155,7 +156,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '~30 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 5,
     title: 'Week 5',
@@ -178,7 +179,7 @@ final List<_Entry> _timelineEntries = [
         'Eat small, frequent meals every 2–3 hours to manage nausea. Ginger tea and Vitamin B6 (10–25 mg) are safe and effective.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 6,
     title: 'Week 6',
@@ -203,7 +204,7 @@ final List<_Entry> _timelineEntries = [
 
   // ── CURRENT WEEK ──────────────────────────────────────────────────────────
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 7,
     title: 'Week 7',
@@ -229,7 +230,7 @@ final List<_Entry> _timelineEntries = [
         'If vomiting prevents keeping ANY food or water down (hyperemesis gravidarum), contact your midwife immediately. Safe anti-nausea medication is available.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '🩺 First Antenatal Booking',
     dayRange: 'Due at Week 8–10',
@@ -240,7 +241,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '60–90 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.vaccine,
     title: '💉 First Blood Tests & Screenings',
     dayRange: 'At booking (Week 8–10)',
@@ -251,7 +252,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '20–30 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 8,
     title: 'Week 8',
@@ -273,7 +274,7 @@ final List<_Entry> _timelineEntries = [
         'Avoid raw/undercooked meat, raw shellfish, unpasteurised cheese, pâté and deli meats to prevent listeria and toxoplasmosis.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 9,
     title: 'Week 9',
@@ -295,7 +296,7 @@ final List<_Entry> _timelineEntries = [
         'Start Kegel (pelvic floor) exercises now. Do 3 sets of 10 x 5-second contractions daily. Prevents incontinence and speeds postnatal recovery.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 10,
     title: 'Week 10',
@@ -317,7 +318,7 @@ final List<_Entry> _timelineEntries = [
         'After week 10, miscarriage risk drops to under 1%. Many parents choose this time to share their news.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '🔬 NIPT or CVS (Optional)',
     dayRange: 'Week 10–13 if chosen',
@@ -328,7 +329,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '30–60 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 11,
     title: 'Week 11',
@@ -348,7 +349,7 @@ final List<_Entry> _timelineEntries = [
     ],
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 12,
     title: 'Week 12',
@@ -371,7 +372,7 @@ final List<_Entry> _timelineEntries = [
         '🎉 End of first trimester! Miscarriage risk is now very low. Safe to share your news if you wish.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '📷 12-Week Dating Scan',
     dayRange: 'Week 11–14 (book now)',
@@ -384,7 +385,7 @@ final List<_Entry> _timelineEntries = [
 
   // ── SECOND TRIMESTER ──────────────────────────────────────────────────────
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 16,
     title: 'Week 16',
@@ -405,7 +406,7 @@ final List<_Entry> _timelineEntries = [
     ],
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '🩸 Anomaly Scan + AFP Test',
     dayRange: 'Week 18–21 · Book ahead',
@@ -416,7 +417,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '45–60 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 20,
     title: 'Week 20',
@@ -440,7 +441,7 @@ final List<_Entry> _timelineEntries = [
         'From week 20, start sleeping on your left side. This improves blood flow through the inferior vena cava to the placenta.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.vaccine,
     title: '💉 Influenza (Flu) Vaccine',
     dayRange: 'Week 20+ · Strongly recommended',
@@ -451,7 +452,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '10–15 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 24,
     title: 'Week 24',
@@ -474,7 +475,7 @@ final List<_Entry> _timelineEntries = [
         'At 24 weeks, premature babies can survive with intensive neonatal care. Know the signs of preterm labour: regular contractions before 37 weeks, back pain, pelvic pressure.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '🩺 Glucose Tolerance Test (OGTT)',
     dayRange: 'Week 24–28 · Gestational diabetes',
@@ -485,7 +486,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '2 hours (fasting required)',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 28,
     title: 'Week 28',
@@ -508,7 +509,7 @@ final List<_Entry> _timelineEntries = [
         'From 28 weeks: count kicks daily. 10 kicks in 2 hours is the guideline. Contact your midwife immediately if you notice a significant reduction.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.vaccine,
     title: '💉 Tdap — Whooping Cough Vaccine',
     dayRange: 'Week 27–36 · Every pregnancy',
@@ -519,7 +520,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '15 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 32,
     title: 'Week 32',
@@ -542,7 +543,7 @@ final List<_Entry> _timelineEntries = [
         'Start your birth plan now. Pack your hospital bag by week 36. Include: ID, maternity notes, baby clothes, feeding supplies, toiletries, phone charger.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '📷 Growth & Wellbeing Scan',
     dayRange: 'Week 32–34 · Check growth',
@@ -553,7 +554,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '30–40 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 36,
     title: 'Week 36',
@@ -576,7 +577,7 @@ final List<_Entry> _timelineEntries = [
         '✅ Hospital bag should be packed and ready. Pre-register with your delivery hospital. Know your route and parking.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.appointment,
     title: '🩺 GBS Swab Test',
     dayRange: 'Week 35–37 · Group B Strep',
@@ -587,7 +588,7 @@ final List<_Entry> _timelineEntries = [
     apptDuration: '10–15 minutes',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 38,
     title: 'Week 38',
@@ -610,7 +611,7 @@ final List<_Entry> _timelineEntries = [
         'Know the signs of labour: regular contractions getting closer (5-1-1 rule: 5 min apart, 1 min long, for 1 hour), waters breaking, or bloody show.',
   ),
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 40,
     title: 'Week 40',
@@ -638,8 +639,52 @@ final List<_Entry> _timelineEntries = [
 // Screen
 // ─────────────────────────────────────────────────────────────────────────────
 
-class TimelineScreen extends StatelessWidget {
-  const TimelineScreen({super.key});
+class TimelineScreen extends StatefulWidget {
+  final String? scrollToEntryTitle;
+
+  const TimelineScreen({super.key, this.scrollToEntryTitle});
+
+  @override
+  State<TimelineScreen> createState() => _TimelineScreenState();
+}
+
+class _TimelineScreenState extends State<TimelineScreen> {
+  final Map<String, GlobalKey> _entryKeys = {};
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Create keys for all entries
+    for (final entry in _timelineEntries) {
+      _entryKeys[entry.title] = GlobalKey();
+    }
+
+    // Scroll to target entry after build
+    if (widget.scrollToEntryTitle != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollToEntry(widget.scrollToEntryTitle!);
+      });
+    }
+  }
+
+  void _scrollToEntry(String title) {
+    final key = _entryKeys[title];
+    if (key?.currentContext != null) {
+      Scrollable.ensureVisible(
+        key!.currentContext!,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        alignment: 0.2,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -652,7 +697,7 @@ class TimelineScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Pregnancy Timeline', style: AppTextStyles.heading3),
+        title: const Text('Pregnancy Timeline', style: AppTextStyles.heading3),
         centerTitle: true,
         actions: [
           IconButton(
@@ -673,10 +718,12 @@ class TimelineScreen extends StatelessWidget {
           // ── List ──────────────────────────────────────────────────────
           Expanded(
             child: ListView.builder(
+              controller: _scrollController,
               padding: const EdgeInsets.fromLTRB(
                   AppSpacing.lg, 4, AppSpacing.lg, 48),
               itemCount: _timelineEntries.length,
               itemBuilder: (ctx, i) => _TItem(
+                key: _entryKeys[_timelineEntries[i].title],
                 entry: _timelineEntries[i],
                 isLast: i == _timelineEntries.length - 1,
               ),
@@ -708,22 +755,24 @@ class TimelineScreen extends StatelessWidget {
                     color: AppColors.divider,
                     borderRadius: BorderRadius.circular(2))),
             const SizedBox(height: AppSpacing.md),
-            Text('Your Key Dates', style: AppTextStyles.heading3),
+            const Text('Your Key Dates', style: AppTextStyles.heading3),
             const SizedBox(height: AppSpacing.lg),
-            _DateRow('Last Period (LMP)', _kLmpDate, '📅'),
+            const _DateRow('Last Period (LMP)', _kLmpDate, '📅'),
             const Divider(),
-            _DateRow('Estimated Due Date', _kDueDate, '🎯'),
+            const _DateRow('Estimated Due Date', _kDueDate, '🎯'),
             const Divider(),
-            _DateRow('Currently at', 'Week $_kCurrentWeek + $_kCurrentDay days',
-                '📍'),
+            const _DateRow('Currently at',
+                'Week $_kCurrentWeek + $_kCurrentDay days', '📍'),
             const Divider(),
             _DateRow('Days remaining', '$daysLeft days to due date', '⏳'),
             const Divider(),
-            _DateRow('1st Trimester ends', 'Week 12 · Nov 18, 2024', '1️⃣'),
+            const _DateRow(
+                '1st Trimester ends', 'Week 12 · Nov 18, 2024', '1️⃣'),
             const Divider(),
-            _DateRow('2nd Trimester ends', 'Week 27 · Feb 10, 2025', '2️⃣'),
+            const _DateRow(
+                '2nd Trimester ends', 'Week 27 · Feb 10, 2025', '2️⃣'),
             const Divider(),
-            _DateRow('Full term (Week 39)', 'May 12, 2025', '✅'),
+            const _DateRow('Full term (Week 39)', 'May 12, 2025', '✅'),
             const SizedBox(height: AppSpacing.lg),
           ]),
         ),
@@ -769,13 +818,14 @@ class _SummaryStrip extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _Pip('Week $_kCurrentWeek', '+$_kCurrentDay days', AppColors.primary),
+          const _Pip(
+              'Week $_kCurrentWeek', '+$_kCurrentDay days', AppColors.primary),
           _Divider(),
           _Pip('$daysLeft days', 'to due date', Colors.orange),
           _Divider(),
           _Pip(tri, 'trimester', triColor),
           _Divider(),
-          _Pip('May 26', 'due date', Colors.green),
+          const _Pip('May 26', 'due date', Colors.green),
         ],
       ),
     );
@@ -811,14 +861,14 @@ class _Divider extends StatelessWidget {
 class _Legend extends StatelessWidget {
   const _Legend();
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+  Widget build(BuildContext context) => const Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         child: Row(children: [
           _Dot(AppColors.primary, 'Week milestone'),
-          const SizedBox(width: 14),
-          _Dot(const Color(0xFF5B8DEF), 'Appointment'),
-          const SizedBox(width: 14),
-          _Dot(const Color(0xFF10B981), 'Vaccine / Test'),
+          SizedBox(width: 14),
+          _Dot(Color(0xFF5B8DEF), 'Appointment'),
+          SizedBox(width: 14),
+          _Dot(Color(0xFF10B981), 'Vaccine / Test'),
         ]),
       );
 }
@@ -847,7 +897,10 @@ class _Dot extends StatelessWidget {
 class _TItem extends StatefulWidget {
   final _Entry entry;
   final bool isLast;
-  const _TItem({required this.entry, required this.isLast});
+  const _TItem(
+      {required this.entry,
+      required this.isLast,
+      GlobalKey<State<StatefulWidget>>? key});
   @override
   State<_TItem> createState() => _TItemState();
 }
@@ -1020,7 +1073,7 @@ class _TItemState extends State<_TItem> {
                               e.apptWhen != null) ...[
                             const SizedBox(height: 4),
                             Row(children: [
-                              Icon(Icons.schedule,
+                              const Icon(Icons.schedule,
                                   size: 11, color: AppColors.textLight),
                               const SizedBox(width: 4),
                               Text(e.apptWhen!,
@@ -1075,7 +1128,7 @@ class _ExpandedBody extends StatelessWidget {
             // ── Week milestone ─────────────────────────────────────────
             if (e.type == _EntryType.week) ...[
               if (e.babySize != null) ...[
-                _SectionTitle('👶 Baby this week'),
+                const _SectionTitle('👶 Baby this week'),
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -1120,7 +1173,7 @@ class _ExpandedBody extends StatelessWidget {
                 const SizedBox(height: 12),
               ],
               if (e.momFacts != null) ...[
-                _SectionTitle('🤰 Your body'),
+                const _SectionTitle('🤰 Your body'),
                 ...e.momFacts!.map((f) => Padding(
                       padding: const EdgeInsets.only(bottom: 5),
                       child: Row(
@@ -1187,23 +1240,29 @@ class _ExpandedBody extends StatelessWidget {
                 Row(children: [
                   Expanded(
                       child: ElevatedButton.icon(
-                    onPressed: onBookToggle,
-                    icon: Icon(
-                      booked ? Icons.check_circle : Icons.calendar_today,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MidwivesScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.calendar_today,
                       size: 15,
                       color: Colors.white,
                     ),
-                    label: Text(
-                      booked ? 'Booked ✓' : 'Book Appointment',
-                      style: const TextStyle(
+                    label: const Text(
+                      'Book Appointment',
+                      style: TextStyle(
                           color: Colors.white,
                           fontSize: 13,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w600),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:
-                          booked ? Colors.green : const Color(0xFF5B8DEF),
+                      backgroundColor: const Color(0xFF5B8DEF),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(AppRadius.full)),
@@ -1302,7 +1361,8 @@ class _ExpandedBody extends StatelessWidget {
                                   );
                                 }
                               : null,
-                          icon: const Icon(Icons.check_circle_outline, size: 15),
+                          icon:
+                              const Icon(Icons.check_circle_outline, size: 15),
                           label: const Text(
                             'Already gotten',
                             style: TextStyle(
@@ -1398,7 +1458,7 @@ class _CurrentBadge extends StatelessWidget {
           color: AppColors.primary.withValues(alpha: 0.12),
           borderRadius: BorderRadius.circular(AppRadius.full),
         ),
-        child: Text('You are here',
+        child: const Text('You are here',
             style: TextStyle(
                 fontSize: 9,
                 color: AppColors.primary,

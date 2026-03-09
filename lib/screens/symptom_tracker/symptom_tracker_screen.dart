@@ -52,19 +52,19 @@ final _allSymptoms = [
 // Map symptoms → recommendations
 Map<String, List<_Recommendation>> _symptomRecommendations = {
   'Nausea': [
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🍌',
         title: 'Banana Oat Smoothie',
         reason:
             'Vitamin B6 in bananas is clinically shown to reduce pregnancy nausea.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🫚',
         title: 'Ginger Tea',
         reason:
             'Ginger reduces nausea effectively — a well-studied pregnancy remedy.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'medicine',
         emoji: '💊',
         title: 'Vitamin B6 supplement',
@@ -72,71 +72,71 @@ Map<String, List<_Recommendation>> _symptomRecommendations = {
             'Often prescribed for morning sickness. Consult your doctor first.'),
   ],
   'Back Pain': [
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🧘‍♀️',
         title: 'Prenatal Yoga',
         reason:
             'Cat-cow and child\'s pose specifically target pregnancy back pain.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🪑',
         title: 'Seated Back Exercises',
         reason: 'Gentle seated core work reduces lumbar strain.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'medicine',
         emoji: '💊',
         title: 'Paracetamol (if needed)',
         reason: 'Safe pain relief during pregnancy. Max 4g/day.'),
   ],
   'Fatigue': [
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🥣',
         title: 'Lentil & Spinach Soup',
         reason: 'High iron content combats anaemia-related fatigue.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🚶‍♀️',
         title: 'Gentle Walk (10–15 min)',
         reason: 'Light movement boosts energy better than rest alone.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🟤',
         title: 'Date & Walnut Snack',
         reason: 'Natural sugars provide quick energy without crash.'),
   ],
   'Heartburn': [
-    _Recommendation(
+    const _Recommendation(
         type: 'medicine',
         emoji: '💊',
         title: 'Omeprazole (if prescribed)',
         reason: 'Safe PPI for pregnancy heartburn. Consult your midwife.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🥛',
         title: 'Small Frequent Meals',
         reason: 'Avoid large meals. Eat slowly and stay upright 30 min after.'),
   ],
   'Swollen Feet': [
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🏊‍♀️',
         title: 'Swimming / Water Walking',
         reason: 'Water pressure reduces oedema and relieves swollen legs.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🚶‍♀️',
         title: 'Gentle Walking',
         reason: 'Activates calf pump to push fluid back up.'),
   ],
   'Headache': [
-    _Recommendation(
+    const _Recommendation(
         type: 'medicine',
         emoji: '💊',
         title: 'Paracetamol',
         reason: 'Safe first-line treatment for headaches in pregnancy.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🤸‍♀️',
         title: 'Gentle Neck Stretches',
@@ -144,83 +144,83 @@ Map<String, List<_Recommendation>> _symptomRecommendations = {
             'Tension headaches often respond well to neck and shoulder stretching.'),
   ],
   'Constipation': [
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🥣',
         title: 'High-Fibre Lentil Soup',
         reason: 'Soluble and insoluble fibre promotes regular bowel movement.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🚶‍♀️',
         title: 'Daily Walking',
         reason: 'Even 20 min of walking stimulates intestinal motility.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '💧',
         title: 'Increase Water Intake',
         reason: 'Dehydration is a main cause of constipation. Aim for 2L/day.'),
   ],
   'Insomnia': [
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🤸‍♀️',
         title: 'Bedtime Stretching',
         reason:
             'Gentle stretches before bed reduce tension and promote sleep.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🧘‍♀️',
         title: 'Prenatal Yoga (evening)',
         reason: 'Breathing and relaxation techniques improve sleep quality.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🥛',
         title: 'Warm Milk or Chamomile Tea',
         reason: 'Tryptophan in milk and chamomile support sleep.'),
   ],
   'Leg Cramps': [
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🍌',
         title: 'Banana (Potassium)',
         reason: 'Potassium deficiency is linked to leg cramps.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🤸‍♀️',
         title: 'Calf Stretches Before Bed',
         reason: 'Regular calf stretching prevents nocturnal leg cramps.'),
   ],
   'Mood Swings': [
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🚶‍♀️',
         title: 'Daily Walk Outdoors',
         reason: 'Exercise releases endorphins and serotonin, improving mood.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🧘‍♀️',
         title: 'Prenatal Yoga',
         reason: 'Mindfulness and breathing reduce emotional reactivity.'),
   ],
   'Anxiety': [
-    _Recommendation(
+    const _Recommendation(
         type: 'workout',
         emoji: '🧘‍♀️',
         title: 'Prenatal Yoga & Breathing',
         reason: 'Deep breathing activates the parasympathetic nervous system.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🫐',
         title: 'Yogurt & Berry Parfait',
         reason: 'Gut-brain axis: probiotics may reduce anxiety symptoms.'),
   ],
   'Dizziness': [
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '🧃',
         title: 'Eat Small Frequent Meals',
         reason: 'Low blood sugar is a common cause of dizziness in pregnancy.'),
-    _Recommendation(
+    const _Recommendation(
         type: 'food',
         emoji: '💧',
         title: 'Stay Hydrated',
@@ -522,7 +522,8 @@ class _InputView extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadius.full)),
             ),
-            child: Text('Get Recommendations', style: AppTextStyles.buttonText),
+            child: const Text('Get Recommendations',
+                style: AppTextStyles.buttonText),
           ),
         ),
       ]),
@@ -652,19 +653,20 @@ class _ResultsView extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
 
         if (workouts.isNotEmpty) ...[
-          _SectionHeader(icon: '🏃‍♀️', title: 'Recommended Workouts'),
+          const _SectionHeader(icon: '🏃‍♀️', title: 'Recommended Workouts'),
           const SizedBox(height: AppSpacing.sm),
           ...workouts.map((r) => _RecCard(rec: r, color: AppColors.primary)),
           const SizedBox(height: AppSpacing.md),
         ],
         if (foods.isNotEmpty) ...[
-          _SectionHeader(icon: '🥗', title: 'Recommended Foods & Recipes'),
+          const _SectionHeader(
+              icon: '🥗', title: 'Recommended Foods & Recipes'),
           const SizedBox(height: AppSpacing.sm),
           ...foods.map((r) => _RecCard(rec: r, color: Colors.green)),
           const SizedBox(height: AppSpacing.md),
         ],
         if (meds.isNotEmpty) ...[
-          _SectionHeader(icon: '💊', title: 'Medicine Suggestions'),
+          const _SectionHeader(icon: '💊', title: 'Medicine Suggestions'),
           const SizedBox(height: AppSpacing.sm),
           Container(
             padding: const EdgeInsets.symmetric(

@@ -249,10 +249,11 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () {
-            if (!_setup)
+            if (!_setup) {
               setState(() => _setup = true);
-            else
+            } else {
               Navigator.pop(context);
+            }
           },
         ),
         title: Text(_setup ? 'Personalise Workouts' : 'Your Workouts',
@@ -449,7 +450,7 @@ class _WorkoutListView extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: workouts.length + 1,
       itemBuilder: (_, i) {
-        if (i == 0)
+        if (i == 0) {
           return Padding(
             padding: const EdgeInsets.only(bottom: AppSpacing.md),
             child: Container(
@@ -470,6 +471,7 @@ class _WorkoutListView extends StatelessWidget {
               ]),
             ),
           );
+        }
         return _WorkoutCard(workout: workouts[i - 1]);
       },
     );

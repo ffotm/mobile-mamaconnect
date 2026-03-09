@@ -189,7 +189,7 @@ class _BookingForm extends StatelessWidget {
 
           const SizedBox(height: AppSpacing.lg),
 
-          Text('Session Type', style: AppTextStyles.labelText),
+          const Text('Session Type', style: AppTextStyles.labelText),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: AppSpacing.sm,
@@ -220,7 +220,7 @@ class _BookingForm extends StatelessWidget {
 
           const SizedBox(height: AppSpacing.lg),
 
-          Text('Select Date', style: AppTextStyles.labelText),
+          const Text('Select Date', style: AppTextStyles.labelText),
           const SizedBox(height: AppSpacing.sm),
           GestureDetector(
             onTap: () async {
@@ -266,7 +266,7 @@ class _BookingForm extends StatelessWidget {
 
           const SizedBox(height: AppSpacing.lg),
 
-          Text('Message (optional)', style: AppTextStyles.labelText),
+          const Text('Message (optional)', style: AppTextStyles.labelText),
           const SizedBox(height: AppSpacing.sm),
           CustomTextField(
             hintText: 'Describe your concern or question...',
@@ -346,11 +346,11 @@ class _PaymentForm extends StatelessWidget {
 
           const SizedBox(height: AppSpacing.lg),
 
-          Text('Payment Method', style: AppTextStyles.heading3),
+          const Text('Payment Method', style: AppTextStyles.heading3),
           const SizedBox(height: AppSpacing.md),
 
           // Card number
-          Text('Card Number', style: AppTextStyles.labelText),
+          const Text('Card Number', style: AppTextStyles.labelText),
           const SizedBox(height: AppSpacing.sm),
           CustomTextField(
             hintText: '1234 5678 9012 3456',
@@ -365,7 +365,7 @@ class _PaymentForm extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Expiry', style: AppTextStyles.labelText),
+                    const Text('Expiry', style: AppTextStyles.labelText),
                     const SizedBox(height: AppSpacing.sm),
                     CustomTextField(
                       hintText: 'MM/YY',
@@ -380,7 +380,7 @@ class _PaymentForm extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('CVV', style: AppTextStyles.labelText),
+                    const Text('CVV', style: AppTextStyles.labelText),
                     const SizedBox(height: AppSpacing.sm),
                     CustomTextField(
                       hintText: '•••',
@@ -481,7 +481,7 @@ class _ConfirmedView extends StatelessWidget {
             child: const Icon(Icons.check, color: Colors.white, size: 40),
           ),
           const SizedBox(height: AppSpacing.lg),
-          Text('Booking Confirmed!', style: AppTextStyles.heading2),
+          const Text('Booking Confirmed!', style: AppTextStyles.heading2),
           const SizedBox(height: AppSpacing.sm),
           Text('Your session with ${midwife.name} is booked',
               textAlign: TextAlign.center, style: AppTextStyles.bodyMedium),
@@ -516,7 +516,8 @@ class _ConfirmedView extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.full)),
               ),
-              child: Text('Back to Home', style: AppTextStyles.buttonText),
+              child:
+                  const Text('Back to Home', style: AppTextStyles.buttonText),
             ),
           ),
         ],

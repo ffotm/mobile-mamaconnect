@@ -86,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               )
             : null,
         automaticallyImplyLeading: widget.showBackButton,
-        title: Text('My Profile', style: AppTextStyles.heading3),
+        title: const Text('My Profile', style: AppTextStyles.heading3),
         centerTitle: true,
         actions: [
           TextButton(
@@ -136,7 +136,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: AppSpacing.xl),
 
             // Personal info section
-            _SectionTitle(title: 'Personal Information'),
+            const _SectionTitle(title: 'Personal Information'),
             const SizedBox(height: AppSpacing.md),
             _FieldRow(
                 label: 'Full Name',
@@ -160,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: AppSpacing.lg),
 
             // Health metrics section
-            _SectionTitle(title: 'Health Metrics'),
+            const _SectionTitle(title: 'Health Metrics'),
             const SizedBox(height: AppSpacing.md),
 
             Row(

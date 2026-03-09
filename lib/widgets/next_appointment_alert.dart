@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 import '../screens/timeline/timeline_screen.dart';
+import '../screens/midwives/midwives_screen.dart';
+import '../screens/hospitals/hospitals_screens.dart';
 
 class Appointment {
   final String title;
@@ -81,10 +83,10 @@ void setAppointmentAlert(Appointment alert) {
 
 void markAlertAsCompleted(String title, {bool vaccineOnly = false}) {
   final updated = appointmentAlertsNotifier.value
-      .map((a) {
-        if (a.title != title) return a;
-        if (vaccineOnly && !a.isVaccine) return a;
-        return a.copyWith(completed: true);
+      .where((a) {
+        if (a.title != title) return true;
+        if (vaccineOnly && !a.isVaccine) return true;
+        return false; // Remove this item
       })
       .toList(growable: false);
   appointmentAlertsNotifier.value = updated;
@@ -104,7 +106,14 @@ Appointment? getNextUpcomingAppointment() {
   final upcoming = appointmentAlertsNotifier.value
       .where((a) => !a.completed && a.time.isAfter(now))
       .toList(growable: false)
-    ..sort((a, b) => a.time.compareTo(b.time));
+    ..sort((a, b) {
+      // Prioritize vaccines/tests over appointments
+      if (a.isVaccine != b.isVaccine) {
+        return a.isVaccine ? -1 : 1;
+      }
+      // Then sort by time
+      return a.time.compareTo(b.time);
+    });
   return upcoming.isEmpty ? null : upcoming.first;
 }
 
@@ -132,7 +141,11 @@ class NextAppointmentAlert extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const TimelineScreen()),
+              MaterialPageRoute(
+                builder: (_) => TimelineScreen(
+                  scrollToEntryTitle: nextAppointment.title,
+                ),
+              ),
             );
           },
           child: Container(
@@ -195,24 +208,57 @@ class NextAppointmentAlert extends StatelessWidget {
                   ),
                 ),
                 if (nextAppointment.isVaccine)
-                  TextButton(
-                    onPressed: () {
-                      markAlertAsCompleted(nextAppointment.title,
-                          vaccineOnly: true);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Vaccine marked as already gotten.'),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => _showBookingDialog(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primary,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          minimumSize: Size.zero,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
-                      );
-                    },
-                    child: const Text(
-                      'Already gotten',
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins',
+                        child: const Text(
+                          'Book',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
                       ),
-                    ),
+                      TextButton(
+                        onPressed: () {
+                          markAlertAsCompleted(nextAppointment.title,
+                              vaccineOnly: true);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Vaccine marked as already gotten.'),
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          'Already gotten',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 else
                   Container(
@@ -238,4 +284,108 @@ class NextAppointmentAlert extends StatelessWidget {
       },
     );
   }
+}
+void _showBookingDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: const Text(
+        'Book Vaccine/Test',
+        style: TextStyle(
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Poppins',
+          fontSize: 18,
+        ),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'Where would you like to book?',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 20),
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HospitalsScreen(),
+                ),
+              );
+            },
+            leading: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.local_hospital, color: AppColors.primary),
+            ),
+            title: const Text(
+              'Hospital',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+              ),
+            ),
+            subtitle: const Text(
+              'Book at a nearby hospital',
+              style: TextStyle(fontSize: 12),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          ),
+          const Divider(),
+          ListTile(
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const MidwivesScreen(),
+                ),
+              );
+            },
+            leading: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.people, color: Color(0xFF10B981)),
+            ),
+            title: const Text(
+              'Midwife',
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Poppins',
+              ),
+            ),
+            subtitle: const Text(
+              'Book with a certified midwife',
+              style: TextStyle(fontSize: 12),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }

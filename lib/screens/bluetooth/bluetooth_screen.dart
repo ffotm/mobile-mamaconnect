@@ -68,7 +68,7 @@ class _BluetoothScreenState extends State<BluetoothScreen>
                 onPressed: () => Navigator.pop(context),
               )
             : null,
-        title: Text('Bluetooth', style: AppTextStyles.heading3),
+        title: const Text('Bluetooth', style: AppTextStyles.heading3),
         centerTitle: true,
       ),
       body: AnimatedSwitcher(
@@ -118,9 +118,9 @@ class _SearchingView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text('Searching for devices...', style: AppTextStyles.heading3),
+          const Text('Searching for devices...', style: AppTextStyles.heading3),
           const SizedBox(height: AppSpacing.sm),
-          Text(
+          const Text(
             'Make sure your device is nearby\nand powered on',
             textAlign: TextAlign.center,
             style: AppTextStyles.bodyMedium,
@@ -219,7 +219,8 @@ class _FoundView extends StatelessWidget {
                       color: AppColors.primary, size: 30),
                 ),
                 const SizedBox(height: AppSpacing.md),
-                Text('Mamaconnect Monitor', style: AppTextStyles.heading3),
+                const Text('Mamaconnect Monitor',
+                    style: AppTextStyles.heading3),
                 const SizedBox(height: AppSpacing.xs),
                 Text('Ready to connect',
                     style: AppTextStyles.bodySmall
@@ -273,10 +274,11 @@ class _ConnectingView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacing.xl),
-          Text('Connecting to\nMamaconnect Monitor...',
+          const Text('Connecting to\nMamaconnect Monitor...',
               textAlign: TextAlign.center, style: AppTextStyles.heading3),
           const SizedBox(height: AppSpacing.sm),
-          Text('This will only take a moment', style: AppTextStyles.bodyMedium),
+          const Text('This will only take a moment',
+              style: AppTextStyles.bodyMedium),
           const SizedBox(height: AppSpacing.lg),
           const SizedBox(
             width: 180,
@@ -342,9 +344,9 @@ class _ConnectedView extends StatelessWidget {
             child: const Icon(Icons.check, color: Colors.white, size: 36),
           ),
           const SizedBox(height: AppSpacing.lg),
-          Text('Connected Successfully!', style: AppTextStyles.heading2),
+          const Text('Connected Successfully!', style: AppTextStyles.heading2),
           const SizedBox(height: AppSpacing.xs),
-          Text('Your Mamaconnect Monitor is ready to use',
+          const Text('Your Mamaconnect Monitor is ready to use',
               style: AppTextStyles.bodyMedium),
           const SizedBox(height: AppSpacing.xl),
           Container(
@@ -369,7 +371,7 @@ class _ConnectedView extends StatelessWidget {
                   valueColor: AppColors.textDark,
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                _DeviceInfoRow(
+                const _DeviceInfoRow(
                   icon: Icons.circle,
                   iconColor: Colors.green,
                   label: 'Status',

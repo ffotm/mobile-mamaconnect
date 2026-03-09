@@ -80,7 +80,7 @@ class _ShopScreenState extends State<ShopScreen> {
               )
             : null,
         automaticallyImplyLeading: widget.showBackButton,
-        title: Text('Shop', style: AppTextStyles.heading3),
+        title: const Text('Shop', style: AppTextStyles.heading3),
         centerTitle: true,
         actions: [
           IconButton(
@@ -153,10 +153,10 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
 
             // Feature highlights
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Row(
-                children: const [
+                children: [
                   Expanded(
                       child: _HighlightChip(
                           icon: Icons.favorite, label: 'Heart Rate')),
@@ -177,8 +177,8 @@ class _ShopScreenState extends State<ShopScreen> {
 
             const SizedBox(height: AppSpacing.lg),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Text('Choose Your Plan', style: AppTextStyles.heading3),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -225,8 +225,8 @@ class _ShopScreenState extends State<ShopScreen> {
             ),
 
             // Reviews
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Text('Customer Reviews', style: AppTextStyles.heading3),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -464,7 +464,7 @@ class _OrderSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Complete Order', style: AppTextStyles.heading3),
+          const Text('Complete Order', style: AppTextStyles.heading3),
           Text('${bundle.name} Plan — ${bundle.price}',
               style:
                   AppTextStyles.bodySmall.copyWith(color: AppColors.textLight)),
@@ -513,7 +513,7 @@ class _OrderSheet extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.full)),
               ),
-              child: Text('Place Order', style: AppTextStyles.buttonText),
+              child: const Text('Place Order', style: AppTextStyles.buttonText),
             ),
           ),
         ],

@@ -235,7 +235,7 @@ class _StepEmail extends StatelessWidget {
           'No worries! Enter your registered email and we\'ll send you a 6-digit reset code.',
       stepIndex: 0,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        _FieldLabel('Email address'),
+        const _FieldLabel('Email address'),
         _InputField(
           ctrl: ctrl,
           hint: 'your@email.com',
@@ -417,7 +417,7 @@ class _StepNewPasswordState extends State<_StepNewPassword> {
       subtitle: 'Create a strong password for your Mamacita account.',
       stepIndex: 2,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        _FieldLabel('New password'),
+        const _FieldLabel('New password'),
         _InputField(
           ctrl: widget.ctrl1,
           hint: 'Minimum 8 characters',
@@ -428,7 +428,7 @@ class _StepNewPasswordState extends State<_StepNewPassword> {
         const SizedBox(height: 8),
         _PasswordStrength(password: widget.ctrl1.text),
         const SizedBox(height: AppSpacing.md),
-        _FieldLabel('Confirm password'),
+        const _FieldLabel('Confirm password'),
         _InputField(
           ctrl: widget.ctrl2,
           hint: 'Repeat your new password',
@@ -476,7 +476,7 @@ class _StepSuccess extends StatelessWidget {
           ),
 
           const SizedBox(height: AppSpacing.xl),
-          Text('Password Reset!', style: AppTextStyles.heading2),
+          const Text('Password Reset!', style: AppTextStyles.heading2),
           const SizedBox(height: AppSpacing.md),
           Text(
             'Your password has been changed successfully.\n'
@@ -496,7 +496,8 @@ class _StepSuccess extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(AppRadius.full)),
               ),
-              child: Text('Back to Sign In', style: AppTextStyles.buttonText),
+              child: const Text('Back to Sign In',
+                  style: AppTextStyles.buttonText),
             ),
           ),
         ]),

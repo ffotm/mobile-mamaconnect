@@ -130,7 +130,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     SizedBox(height: screenHeight * 0.28),
 
                     // Birthday
-                    _FormLabel(text: 'When is your birthday?'),
+                    const _FormLabel(text: 'When is your birthday?'),
                     const SizedBox(height: AppSpacing.sm),
                     CustomTextField(
                       hintText: 'Your birthday',
@@ -221,7 +221,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     const SizedBox(height: AppSpacing.lg),
 
                     // Pregnancy week picker
-                    _FormLabel(text: 'How many weeks pregnant are you?'),
+                    const _FormLabel(text: 'How many weeks pregnant are you?'),
                     const SizedBox(height: AppSpacing.sm),
                     _WeekSliderPicker(
                       value: _pregnancyWeeks,
