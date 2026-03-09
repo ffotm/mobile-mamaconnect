@@ -6,6 +6,7 @@ import '../../constants/app_constants.dart';
 import '../timeline/timeline_screen.dart';
 import '../bluetooth/bluetooth_screen.dart';
 import '../alerts/alerts_screen.dart';
+import '../history/logs_history_screen.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 class HomeScreen extends StatefulWidget {

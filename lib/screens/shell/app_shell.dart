@@ -4,6 +4,7 @@ import '../home/home_screen.dart';
 import '../midwives/midwives_screen.dart';
 import '../profile/profile_screen.dart';
 import '../shop/shop_screen.dart';
+import '../history/logs_history_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -17,6 +18,7 @@ class _AppShellState extends State<AppShell> {
 
   late final List<Widget> _pages = const [
     HomeScreen(),
+    LogsHistoryScreen(showBackButton: false),
     MidwivesScreen(showBackButton: false),
     ShopScreen(showBackButton: false),
     ProfileScreen(showBackButton: false),

@@ -129,7 +129,7 @@ class _MidwivesScreenState extends State<MidwivesScreen> {
               )
             : null,
         automaticallyImplyLeading: widget.showBackButton,
-        title: Text('Midwives', style: AppTextStyles.heading3),
+        title: const Text('Midwives', style: AppTextStyles.heading3),
         centerTitle: true,
       ),
       body: Column(

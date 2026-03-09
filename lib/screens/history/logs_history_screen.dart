@@ -120,7 +120,8 @@ const _mockAlerts = [
 // ── Screen ────────────────────────────────────────────────────────────────────
 
 class LogsHistoryScreen extends StatefulWidget {
-  const LogsHistoryScreen({super.key});
+  final bool showBackButton;
+  const LogsHistoryScreen({super.key, this.showBackButton = true});
 
   @override
   State<LogsHistoryScreen> createState() => _LogsHistoryScreenState();

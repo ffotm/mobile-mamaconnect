@@ -9,6 +9,7 @@ class AppRoutes {
   static const String chatbot = '/chatbot';
   static const String shop = '/shop';
   static const String midwifeDashboard = '/midwife_dashboard';
+  static const String forgotPassword = '/forgot-password';
 }
 
 class AppSpacing {
