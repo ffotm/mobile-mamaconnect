@@ -82,13 +82,11 @@ void setAppointmentAlert(Appointment alert) {
 }
 
 void markAlertAsCompleted(String title, {bool vaccineOnly = false}) {
-  final updated = appointmentAlertsNotifier.value
-      .where((a) {
-        if (a.title != title) return true;
-        if (vaccineOnly && !a.isVaccine) return true;
-        return false; // Remove this item
-      })
-      .toList(growable: false);
+  final updated = appointmentAlertsNotifier.value.where((a) {
+    if (a.title != title) return true;
+    if (vaccineOnly && !a.isVaccine) return true;
+    return false; // Remove this item
+  }).toList(growable: false);
   appointmentAlertsNotifier.value = updated;
 }
 
@@ -239,7 +237,8 @@ class NextAppointmentAlert extends StatelessWidget {
                               vaccineOnly: true);
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Vaccine marked as already gotten.'),
+                              content:
+                                  Text('Vaccine marked as already gotten.'),
                             ),
                           );
                         },
@@ -285,6 +284,7 @@ class NextAppointmentAlert extends StatelessWidget {
     );
   }
 }
+
 void _showBookingDialog(BuildContext context) {
   showDialog(
     context: context,
