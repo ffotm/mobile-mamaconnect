@@ -23,6 +23,7 @@ import 'screens/midwives/midwives_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/shop/shop_screen.dart';
 import 'services/auth_provider.dart';
+import 'providers/subscription_provider.dart';
 import 'screens/hospitals/hospitals_screens.dart';
 import 'screens/midwife_dashboard/midwife_dashboard_screen.dart';
 
@@ -39,6 +40,7 @@ class MamacitaApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
       ],
       child: MaterialApp(
         title: 'Mamaconnect',

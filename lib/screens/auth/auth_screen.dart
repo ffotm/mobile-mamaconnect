@@ -41,7 +41,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     children: [
                       const SizedBox(height: AppSpacing.xl),
                       Text(
-                        'Hello Mamacita',
+                        'Welcome back',
                         style: AppTextStyles.heading1
                             .copyWith(color: AppColors.primary),
                       ),

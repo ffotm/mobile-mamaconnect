@@ -1,8 +1,12 @@
 // lib/screens/workouts/workouts_screen.dart
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/app_text_styles.dart';
+import '../../providers/subscription_provider.dart';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -241,6 +245,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isPremium = context.watch<SubscriptionProvider>().isPremium;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -284,6 +290,8 @@ class _WorkoutsScreenState extends State<WorkoutsScreen> {
                 key: const ValueKey('list'),
                 workouts: _filtered,
                 goal: _goal,
+                isPremium: isPremium,
+                onGetPremium: () => Navigator.pushNamed(context, '/shop'),
               ),
       ),
     );
@@ -424,56 +432,122 @@ class _SetupView extends StatelessWidget {
 class _WorkoutListView extends StatelessWidget {
   final List<_Workout> workouts;
   final String goal;
+  final bool isPremium;
+  final VoidCallback onGetPremium;
   const _WorkoutListView(
-      {super.key, required this.workouts, required this.goal});
+      {super.key,
+      required this.workouts,
+      required this.goal,
+      required this.isPremium,
+      required this.onGetPremium});
 
   @override
   Widget build(BuildContext context) {
-    if (workouts.isEmpty) {
-      return Center(
-          child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Text('🤷‍♀️', style: TextStyle(fontSize: 48)),
-          const SizedBox(height: AppSpacing.md),
-          Text('No matching workouts', style: AppTextStyles.heading3),
-          const SizedBox(height: AppSpacing.sm),
-          Text('Try changing your goal or condition settings.',
-              textAlign: TextAlign.center,
-              style:
-                  AppTextStyles.bodySmall.copyWith(color: AppColors.textLight)),
-        ]),
-      ));
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(AppSpacing.md),
-      itemCount: workouts.length + 1,
-      itemBuilder: (_, i) {
-        if (i == 0) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: AppSpacing.md),
-            child: Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.07),
-                borderRadius: BorderRadius.circular(AppRadius.md),
-                border:
-                    Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
-              ),
-              child: Row(children: [
-                const Icon(Icons.check_circle,
-                    color: AppColors.primary, size: 16),
-                const SizedBox(width: 8),
-                Text('${workouts.length} workouts for "$goal"',
-                    style: AppTextStyles.bodySmall.copyWith(
-                        color: AppColors.primary, fontWeight: FontWeight.w600)),
-              ]),
-            ),
+    final content = workouts.isEmpty
+        ? Center(
+            child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.xl),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Text('🤷‍♀️', style: TextStyle(fontSize: 48)),
+              const SizedBox(height: AppSpacing.md),
+              Text('No matching workouts', style: AppTextStyles.heading3),
+              const SizedBox(height: AppSpacing.sm),
+              Text('Try changing your goal or condition settings.',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.bodySmall
+                      .copyWith(color: AppColors.textLight)),
+            ]),
+          ))
+        : ListView.builder(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            itemCount: workouts.length + 1,
+            itemBuilder: (_, i) {
+              if (i == 0) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                  child: Container(
+                    padding: const EdgeInsets.all(AppSpacing.md),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.07),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      border: Border.all(
+                          color: AppColors.primary.withValues(alpha: 0.2)),
+                    ),
+                    child: Row(children: [
+                      const Icon(Icons.check_circle,
+                          color: AppColors.primary, size: 16),
+                      const SizedBox(width: 8),
+                      Text('${workouts.length} workouts for "$goal"',
+                          style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600)),
+                    ]),
+                  ),
+                );
+              }
+              return _WorkoutCard(workout: workouts[i - 1]);
+            },
           );
-        }
-        return _WorkoutCard(workout: workouts[i - 1]);
-      },
+
+    if (isPremium) return content;
+
+    return Stack(
+      children: [
+        content,
+        Positioned.fill(
+          child: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+              child: Container(color: Colors.white.withValues(alpha: 0.65)),
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.workspace_premium,
+                      color: AppColors.primary, size: 36),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text('Premium Required', style: AppTextStyles.heading3),
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'Your personalised workouts are ready. Upgrade to Premium to unlock this plan.',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.bodySmall
+                        .copyWith(color: AppColors.textMedium, height: 1.4),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: onGetPremium,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppRadius.full),
+                        ),
+                      ),
+                      child: const Text('Get Premium',
+                          style: AppTextStyles.buttonText),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

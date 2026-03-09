@@ -2,9 +2,11 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
+import '../../providers/subscription_provider.dart';
 import '../graphs/graphs_screen.dart';
 
 class MonitorScreen extends StatefulWidget {
@@ -23,10 +25,9 @@ class _MonitorScreenState extends State<MonitorScreen> {
   int _kickCount = 3;
   double _temperature = 36.7;
   double _movement = 0.4;
-  double _oxygenLevel = 98.2;
 
-  // Update interval in hours (default 2)
-  double _updateIntervalHours = 2;
+  // Update interval in hours (default 4 for free users)
+  double _updateIntervalHours = 4;
   DateTime _lastUpdated = DateTime.now();
 
   final List<double> _heartbeatHistory = [138, 140, 142, 141, 143, 142];
@@ -46,7 +47,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
           _heartbeat = 138 + _random.nextDouble() * 10;
           _temperature = 36.4 + _random.nextDouble() * 0.6;
           _movement = _random.nextDouble();
-          _oxygenLevel = 97 + _random.nextDouble() * 2;
+
           _lastUpdated = DateTime.now();
           _heartbeatHistory.add(_heartbeat);
           if (_heartbeatHistory.length > 20) _heartbeatHistory.removeAt(0);
@@ -184,18 +185,6 @@ class _MonitorScreenState extends State<MonitorScreen> {
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: _MetricCard(
-                    icon: Icons.air,
-                    iconColor: Colors.teal,
-                    label: 'Oxygen SpO₂',
-                    value: _oxygenLevel.toStringAsFixed(1),
-                    unit: '%',
-                    status: _oxygenLevel >= 95 ? 'Normal' : 'Low',
-                    statusColor: _oxygenLevel >= 95 ? Colors.green : Colors.red,
-                    onTap: () {},
-                  ),
-                ),
               ],
             ),
 
@@ -589,25 +578,80 @@ class _IntervalPickerSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isPremium = context.watch<SubscriptionProvider>().isPremium;
+
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Update Interval', style: AppTextStyles.heading3),
-          Text('How often should we check in?',
+          const Text('Update Interval', style: AppTextStyles.heading3),
+          const Text('How often should we check in?',
               style: AppTextStyles.bodyMedium),
           const SizedBox(height: AppSpacing.lg),
-          ..._options.map((opt) => ListTile(
-                contentPadding: EdgeInsets.zero,
-                title: Text(opt.label, style: AppTextStyles.bodyLarge),
-                trailing: opt.value == current
-                    ? const Icon(Icons.check_circle, color: AppColors.primary)
-                    : const Icon(Icons.radio_button_unchecked,
-                        color: AppColors.textLight),
-                onTap: () => onSelected(opt.value),
-              )),
+          ..._options.map((opt) {
+            final requiresPremium = opt.value <= 2.0;
+            final isLocked = requiresPremium && !isPremium;
+
+            return ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Row(
+                children: [
+                  Text(
+                    opt.label,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color:
+                          isLocked ? AppColors.textLight : AppColors.textDark,
+                    ),
+                  ),
+                  if (isLocked) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(AppRadius.full),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.lock,
+                              size: 10, color: AppColors.primary),
+                          const SizedBox(width: 3),
+                          Text(
+                            'Premium',
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.primary,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              trailing: opt.value == current
+                  ? const Icon(Icons.check_circle, color: AppColors.primary)
+                  : Icon(
+                      isLocked
+                          ? Icons.lock_outline
+                          : Icons.radio_button_unchecked,
+                      color: isLocked ? AppColors.primary : AppColors.textLight,
+                    ),
+              onTap: () {
+                if (isLocked) {
+                  Navigator.pop(context);
+                  Navigator.pushNamed(context, AppRoutes.shop);
+                } else {
+                  onSelected(opt.value);
+                }
+              },
+            );
+          }),
           const SizedBox(height: AppSpacing.md),
         ],
       ),

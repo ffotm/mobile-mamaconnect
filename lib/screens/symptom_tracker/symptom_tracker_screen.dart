@@ -1,19 +1,23 @@
 // lib/screens/symptoms/symptom_tracker_screen.dart
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_constants.dart';
 import '../../constants/app_text_styles.dart';
+import '../../providers/subscription_provider.dart';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 class _Symptom {
   final String name;
-  final String emoji;
+
   final String category;
   bool selected;
   _Symptom(
       {required this.name,
-      required this.emoji,
+    
       required this.category,
       bool? selected})
       : selected = selected ?? false;
@@ -21,8 +25,8 @@ class _Symptom {
 
 class _Recommendation {
   final String type; // 'workout', 'food', 'medicine'
-  final String emoji;
   final String title;
+final String emoji;
   final String reason;
   const _Recommendation(
       {required this.type,
@@ -32,22 +36,22 @@ class _Recommendation {
 }
 
 final _allSymptoms = [
-  _Symptom(name: 'Nausea', emoji: '🤢', category: 'Digestive'),
-  _Symptom(name: 'Back Pain', emoji: '🔙', category: 'Pain'),
-  _Symptom(name: 'Fatigue', emoji: '😴', category: 'Energy'),
-  _Symptom(name: 'Heartburn', emoji: '🔥', category: 'Digestive'),
-  _Symptom(name: 'Swollen Feet', emoji: '🦶', category: 'Circulation'),
-  _Symptom(name: 'Headache', emoji: '🤕', category: 'Pain'),
-  _Symptom(name: 'Constipation', emoji: '💤', category: 'Digestive'),
-  _Symptom(name: 'Insomnia', emoji: '🌙', category: 'Sleep'),
-  _Symptom(name: 'Leg Cramps', emoji: '⚡', category: 'Pain'),
-  _Symptom(name: 'Mood Swings', emoji: '🎭', category: 'Mental'),
-  _Symptom(name: 'Shortness of Breath', emoji: '💨', category: 'Respiratory'),
-  _Symptom(name: 'Pelvic Pressure', emoji: '🔻', category: 'Pain'),
-  _Symptom(name: 'Dizziness', emoji: '💫', category: 'Circulation'),
-  _Symptom(name: 'Breast Tenderness', emoji: '💗', category: 'Physical'),
-  _Symptom(name: 'Frequent Urination', emoji: '🚽', category: 'Urinary'),
-  _Symptom(name: 'Anxiety', emoji: '😰', category: 'Mental'),
+  _Symptom(name: 'Nausea', category: 'Digestive'),
+  _Symptom(name: 'Back Pain', category: 'Pain'),
+  _Symptom(name: 'Fatigue',  category: 'Energy'),
+  _Symptom(name: 'Heartburn',  category: 'Digestive'),
+  _Symptom(name: 'Swollen Feet', category: 'Circulation'),
+  _Symptom(name: 'Headache', category: 'Pain'),
+  _Symptom(name: 'Constipation',  category: 'Digestive'),
+  _Symptom(name: 'Insomnia',  category: 'Sleep'),
+  _Symptom(name: 'Leg Cramps', category: 'Pain'),
+  _Symptom(name: 'Mood Swings', category: 'Mental'),
+  _Symptom(name: 'Shortness of Breath', category: 'Respiratory'),
+  _Symptom(name: 'Pelvic Pressure', category: 'Pain'),
+  _Symptom(name: 'Dizziness', category: 'Circulation'),
+  _Symptom(name: 'Breast Tenderness', category: 'Physical'),
+  _Symptom(name: 'Frequent Urination',  category: 'Urinary'),
+  _Symptom(name: 'Anxiety',  category: 'Mental'),
 ];
 
 // Map symptoms → recommendations
@@ -241,12 +245,10 @@ class SymptomTrackerScreen extends StatefulWidget {
 
 class _SymptomTrackerScreenState extends State<SymptomTrackerScreen> {
   final List<_Symptom> _symptoms = _allSymptoms
-      .map((s) => _Symptom(name: s.name, emoji: s.emoji, category: s.category))
+      .map((s) => _Symptom(name: s.name, category: s.category))
       .toList();
   int _severity = 2; // 1-5
   bool _showResults = false;
-  bool _aiLoading = false;
-  String? _aiResponse;
   final _noteCtrl = TextEditingController();
 
   List<_Symptom> get _selected => _symptoms.where((s) => s.selected).toList();
@@ -272,23 +274,8 @@ class _SymptomTrackerScreenState extends State<SymptomTrackerScreen> {
     setState(() => _showResults = true);
   }
 
-  Future<void> _askAI() async {
-    setState(() {
-      _aiLoading = true;
-      _aiResponse = null;
-    });
-    // Simulate AI call (backend not connected yet)
-    await Future.delayed(const Duration(seconds: 2));
-    final symptomList = _selected.map((s) => s.name).join(', ');
-    setState(() {
-      _aiLoading = false;
-      _aiResponse =
-          'Based on your symptoms ($symptomList) at severity level $_severity/5:\n\n'
-          '${_selected.any((s) => s.name == 'Nausea' || s.name == 'Fatigue') ? '🌿 Your symptoms suggest early pregnancy discomforts. Ensure you\'re eating small frequent meals and resting well.\n\n' : ''}'
-          '${_selected.any((s) => s.name == 'Back Pain' || s.name == 'Pelvic Pressure') ? '⚠️ Pelvic and back pain in later pregnancy can be normal but should be monitored. Avoid heavy lifting and try a pregnancy support belt.\n\n' : ''}'
-          '${_selected.any((s) => s.name == 'Headache' || s.name == 'Dizziness') ? '💧 Headaches and dizziness can indicate dehydration or blood pressure changes. Drink water and rest in a cool place.\n\n' : ''}'
-          'If symptoms are severe or sudden, please contact your midwife immediately. This advice does not replace professional medical care.';
-    });
+  void _openAiChatbot() {
+    Navigator.pushNamed(context, AppRoutes.chatbot);
   }
 
   @override
@@ -301,13 +288,13 @@ class _SymptomTrackerScreenState extends State<SymptomTrackerScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () {
-            if (_showResults)
+            if (_showResults) {
               setState(() {
                 _showResults = false;
-                _aiResponse = null;
               });
-            else
+            } else {
               Navigator.pop(context);
+            }
           },
         ),
         title: Text(_showResults ? 'Recommendations' : 'Symptom Tracker',
@@ -321,12 +308,9 @@ class _SymptomTrackerScreenState extends State<SymptomTrackerScreen> {
                 key: const ValueKey('results'),
                 selected: _selected,
                 recommendations: _recommendations,
-                aiLoading: _aiLoading,
-                aiResponse: _aiResponse,
-                onAskAI: _askAI,
+                onAskAI: _openAiChatbot,
                 onBack: () => setState(() {
                   _showResults = false;
-                  _aiResponse = null;
                 }),
               )
             : _InputView(
@@ -437,8 +421,7 @@ class _InputView extends StatelessWidget {
                               child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text(s.emoji,
-                                        style: const TextStyle(fontSize: 14)),
+                                  
                                     const SizedBox(width: 6),
                                     Text(s.name,
                                         style: AppTextStyles.bodySmall.copyWith(
@@ -543,8 +526,6 @@ class _InputView extends StatelessWidget {
 class _ResultsView extends StatelessWidget {
   final List<_Symptom> selected;
   final List<_Recommendation> recommendations;
-  final bool aiLoading;
-  final String? aiResponse;
   final VoidCallback onAskAI;
   final VoidCallback onBack;
 
@@ -552,14 +533,13 @@ class _ResultsView extends StatelessWidget {
     super.key,
     required this.selected,
     required this.recommendations,
-    required this.aiLoading,
-    this.aiResponse,
     required this.onAskAI,
     required this.onBack,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isPremium = context.watch<SubscriptionProvider>().isPremium;
     final workouts = recommendations.where((r) => r.type == 'workout').toList();
     final foods = recommendations.where((r) => r.type == 'food').toList();
     final meds = recommendations.where((r) => r.type == 'medicine').toList();
@@ -581,7 +561,7 @@ class _ResultsView extends StatelessWidget {
                       border: Border.all(
                           color: AppColors.primary.withValues(alpha: 0.3)),
                     ),
-                    child: Text('${s.emoji} ${s.name}',
+                    child: Text(' ${s.name}',
                         style: AppTextStyles.bodySmall.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w500)),
@@ -616,38 +596,22 @@ class _ResultsView extends StatelessWidget {
                 style: AppTextStyles.bodySmall
                     .copyWith(color: Colors.white.withValues(alpha: 0.9))),
             const SizedBox(height: AppSpacing.md),
-            if (aiLoading)
-              const Center(
-                  child: CircularProgressIndicator(
-                      color: Colors.white, strokeWidth: 2))
-            else if (aiResponse != null)
-              Container(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(AppRadius.md),
-                ),
-                child: Text(aiResponse!,
-                    style: AppTextStyles.bodySmall
-                        .copyWith(color: Colors.white, height: 1.5)),
-              )
-            else
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: onAskAI,
-                  icon: const Icon(Icons.auto_awesome,
-                      color: Colors.white, size: 16),
-                  label: const Text('Ask AI',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w600)),
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Colors.white, width: 1.5),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.full)),
-                  ),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: onAskAI,
+                icon: const Icon(Icons.auto_awesome,
+                    color: Colors.white, size: 16),
+                label: const Text('Open AI Chatbot',
+                    style:
+                        TextStyle(color: Colors.white, fontWeight: FontWeight.w600)),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: Colors.white, width: 1.5),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadius.full)),
                 ),
               ),
+            ),
           ]),
         ),
 
@@ -656,7 +620,41 @@ class _ResultsView extends StatelessWidget {
         if (workouts.isNotEmpty) ...[
           const _SectionHeader(icon: '🏃‍♀️', title: 'Recommended Workouts'),
           const SizedBox(height: AppSpacing.sm),
-          ...workouts.map((r) => _RecCard(rec: r, color: AppColors.primary)),
+          Stack(
+            children: [
+              Column(
+                children:
+                    workouts.map((r) => _RecCard(rec: r, color: AppColors.primary)).toList(),
+              ),
+              if (!isPremium)
+                Positioned.fill(
+                  child: ClipRect(
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                      child: Container(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        alignment: Alignment.center,
+                        child: SizedBox(
+                          width: 230,
+                          child: ElevatedButton.icon(
+                            onPressed: () => Navigator.pushNamed(context, AppRoutes.shop),
+                            icon: const Icon(Icons.workspace_premium, size: 16),
+                            label: const Text('Get Premium'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(AppRadius.full),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
           const SizedBox(height: AppSpacing.md),
         ],
         if (foods.isNotEmpty) ...[

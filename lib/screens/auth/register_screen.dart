@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
@@ -76,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       const SizedBox(height: AppSpacing.xl),
                       Center(
-                        child: Text('Hello Mamacita',
+                        child: Text('Join us Today',
                             style: AppTextStyles.heading1
                                 .copyWith(color: AppColors.primary)),
                       ),

@@ -1,8 +1,10 @@
 // lib/screens/shop/shop_screen.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
+import '../../providers/subscription_provider.dart';
 import '../../widgets/primary_button.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -15,39 +17,9 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
-  int _selectedBundleIndex = 1; // default: Standard
+  final int _selectedBundleIndex = 0;
 
   final _bundles = const [
-    _Bundle(
-      name: 'Basic',
-      price: '12,900 DA',
-      priceValue: 12900,
-      description: 'Essential monitoring for your pregnancy',
-      features: [
-        'Mamaconnect Monitor device',
-        'Heart rate sensor',
-        'Movement detection',
-        '1 year app subscription',
-        'Email support',
-      ],
-      isPopular: false,
-    ),
-    _Bundle(
-      name: 'Standard',
-      price: '18,900 DA',
-      priceValue: 18900,
-      description: 'Complete care for peace of mind',
-      features: [
-        'Mamaconnect Monitor device',
-        'Heart rate & SpO₂ sensor',
-        'Temperature sensor',
-        'Movement detection',
-        '2 year app subscription',
-        'Priority chat support',
-        '1 free midwife session',
-      ],
-      isPopular: true,
-    ),
     _Bundle(
       name: 'Premium',
       price: '29,900 DA',
@@ -56,10 +28,10 @@ class _ShopScreenState extends State<ShopScreen> {
       features: [
         'Mamaconnect Monitor Pro device',
         'All sensors included',
+        'High-frequency monitoring (30min, 1h, 2h)',
+        'Unlimited AI chatbot',
+        'Personalized workout unlock',
         'Unlimited app subscription',
-        '24/7 midwife hotline',
-        '3 free midwife sessions',
-        'Personalized health reports',
         'Free home delivery',
       ],
       isPopular: false,
@@ -179,12 +151,12 @@ class _ShopScreenState extends State<ShopScreen> {
 
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
-              child: Text('Choose Your Plan', style: AppTextStyles.heading3),
+              child: Text('Premium Plan', style: AppTextStyles.heading3),
             ),
             const SizedBox(height: AppSpacing.sm),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-              child: Text('All plans include the physical device',
+              child: Text('Unlock all premium features with one plan',
                   style: AppTextStyles.bodySmall
                       .copyWith(color: AppColors.textLight)),
             ),
@@ -192,21 +164,18 @@ class _ShopScreenState extends State<ShopScreen> {
             const SizedBox(height: AppSpacing.md),
 
             // Bundle cards
-            ...List.generate(
-                _bundles.length,
-                (i) => _BundleCard(
-                      bundle: _bundles[i],
-                      isSelected: i == _selectedBundleIndex,
-                      onTap: () => setState(() => _selectedBundleIndex = i),
-                    )),
+            _BundleCard(
+              bundle: _bundles.first,
+              isSelected: true,
+              onTap: () {},
+            ),
 
             Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Column(
                 children: [
                   PrimaryButton(
-                    label:
-                        'Order ${_bundles[_selectedBundleIndex].name} — ${_bundles[_selectedBundleIndex].price}',
+                    label: 'Get Premium — ${_bundles.first.price}',
                     onPressed: () => _showOrderConfirmation(context),
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -499,11 +468,11 @@ class _OrderSheet extends StatelessWidget {
             height: 52,
             child: ElevatedButton(
               onPressed: () {
+                context.read<SubscriptionProvider>().activatePremium();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text(
-                        'Order placed! We\'ll contact you to confirm delivery.'),
+                    content: Text('Premium unlocked successfully.'),
                     backgroundColor: Colors.green,
                   ),
                 );

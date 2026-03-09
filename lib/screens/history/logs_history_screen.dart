@@ -130,25 +130,18 @@ class LogsHistoryScreen extends StatefulWidget {
 class _LogsHistoryScreenState extends State<LogsHistoryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tab;
-  // Simulate device not connected
-  bool _deviceConnected = false;
+
+  final bool _deviceConnected = false;
   final List<_Reading> _readings = List.from(_mockReadings);
 
-  // Selected metric for graph
-  int _selectedMetric = 0; // 0=BPM, 1=Temp, 2=Kicks, 3=SpO2
-  final _metrics = ['Heart Rate', 'Temperature', 'Kicks', 'SpO₂'];
+  int _selectedMetric = 0;
+  final _metrics = ['Heart Rate', 'Temperature', 'Kicks'];
   final _metricColors = [
     AppColors.primary,
     Colors.orange,
     Colors.purple,
-    Colors.teal
   ];
-  final _metricIcons = [
-    Icons.favorite,
-    Icons.thermostat,
-    Icons.child_care,
-    Icons.air
-  ];
+  final _metricIcons = [Icons.favorite, Icons.thermostat, Icons.child_care];
 
   @override
   void initState() {
@@ -170,8 +163,7 @@ class _LogsHistoryScreenState extends State<LogsHistoryScreen>
         return _readings.map((r) => r.temperature ?? 0).toList();
       case 2:
         return _readings.map((r) => (r.kicks ?? 0).toDouble()).toList();
-      case 3:
-        return _readings.map((r) => r.spo2 ?? 0).toList();
+
       default:
         return [];
     }
@@ -218,7 +210,7 @@ class _LogsHistoryScreenState extends State<LogsHistoryScreen>
           icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Health Logs', style: AppTextStyles.heading3),
+        title: const Text('Health Logs', style: AppTextStyles.heading3),
         centerTitle: true,
         actions: [
           IconButton(
@@ -261,7 +253,7 @@ class _LogsHistoryScreenState extends State<LogsHistoryScreen>
             onLogManually: _showManualEntrySheet,
           ),
           _HistoryTab(readings: _readings, weeks: _mockWeeks),
-          _AlertsTab(alerts: _mockAlerts),
+          const _AlertsTab(alerts: _mockAlerts),
         ],
       ),
     );
@@ -307,7 +299,6 @@ class _GraphsTab extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Connection status banner
           if (!deviceConnected)
             _ConnectionBanner(
               onConnect: onConnectBluetooth,
@@ -344,7 +335,6 @@ class _GraphsTab extends StatelessWidget {
 
           const SizedBox(height: AppSpacing.lg),
 
-          // Metric selector tabs
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -569,8 +559,6 @@ class _LineChartPainter extends CustomPainter {
   bool shouldRepaint(covariant _LineChartPainter old) => old.values != values;
 }
 
-// ── Connection Banner ─────────────────────────────────────────────────────────
-
 class _ConnectionBanner extends StatelessWidget {
   final VoidCallback onConnect;
   final VoidCallback onManual;
@@ -657,8 +645,6 @@ class _ConnectionBanner extends StatelessWidget {
     );
   }
 }
-
-// ── Tab 2: History ────────────────────────────────────────────────────────────
 
 class _HistoryTab extends StatelessWidget {
   final List<_Reading> readings;
@@ -824,8 +810,6 @@ class _Chip extends StatelessWidget {
       );
 }
 
-// ── Tab 3: Alerts ─────────────────────────────────────────────────────────────
-
 class _AlertsTab extends StatelessWidget {
   final List<_AlertLog> alerts;
   const _AlertsTab({required this.alerts});
@@ -901,14 +885,13 @@ class _ManualEntrySheetState extends State<_ManualEntrySheet> {
   final _bpmCtrl = TextEditingController();
   final _tempCtrl = TextEditingController();
   final _kickCtrl = TextEditingController();
-  final _spo2Ctrl = TextEditingController();
 
   @override
   void dispose() {
     _bpmCtrl.dispose();
     _tempCtrl.dispose();
     _kickCtrl.dispose();
-    _spo2Ctrl.dispose();
+
     super.dispose();
   }
 
@@ -918,7 +901,6 @@ class _ManualEntrySheetState extends State<_ManualEntrySheet> {
       heartRate: double.tryParse(_bpmCtrl.text),
       temperature: double.tryParse(_tempCtrl.text),
       kicks: int.tryParse(_kickCtrl.text),
-      spo2: double.tryParse(_spo2Ctrl.text),
       source: 'manual',
     );
     widget.onSave(r);
@@ -939,7 +921,7 @@ class _ManualEntrySheetState extends State<_ManualEntrySheet> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
-              Text('Log Reading Manually', style: AppTextStyles.heading3),
+              const Text('Log Reading Manually', style: AppTextStyles.heading3),
               const Spacer(),
               IconButton(
                   icon: const Icon(Icons.close),
@@ -976,28 +958,22 @@ class _ManualEntrySheetState extends State<_ManualEntrySheet> {
                       icon: Icons.child_care,
                       color: Colors.purple)),
               const SizedBox(width: AppSpacing.md),
-              Expanded(
-                  child: _EntryField(
-                      label: 'SpO₂ (%)',
-                      ctrl: _spo2Ctrl,
-                      hint: '98',
-                      icon: Icons.air,
-                      color: Colors.teal)),
-            ]),
-            const SizedBox(height: AppSpacing.lg),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: _save,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(AppRadius.full)),
+              const SizedBox(height: AppSpacing.lg),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: _save,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.full)),
+                  ),
+                  child: const Text('Save Reading',
+                      style: AppTextStyles.buttonText),
                 ),
-                child: Text('Save Reading', style: AppTextStyles.buttonText),
               ),
-            ),
+            ]),
           ]),
     );
   }

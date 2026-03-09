@@ -102,7 +102,9 @@ class _AlertsScreenState extends State<AlertsScreen> {
   int get _unreadCount => _alerts.where((a) => !a.isRead).length;
 
   void _markAllRead() => setState(() {
-        for (final a in _alerts) a.isRead = true;
+        for (final a in _alerts) {
+          a.isRead = true;
+        }
       });
 
   @override

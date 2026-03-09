@@ -16,7 +16,7 @@ class GraphsScreen extends StatefulWidget {
 
 class _GraphsScreenState extends State<GraphsScreen> {
   int _selectedTab = 0;
-  final _tabs = ['Heart Rate', 'Temperature', 'Movement', 'SpO₂'];
+  final _tabs = ['Heart Rate', 'Temperature', 'Movement'];
 
   // Generate mock weekly data
   final _random = Random(42);
@@ -35,9 +35,6 @@ class _GraphsScreenState extends State<GraphsScreen> {
           .toList(),
       'Movement':
           days.map((d) => _DataPoint(d, _random.nextDouble() * 100)).toList(),
-      'SpO₂': days
-          .map((d) => _DataPoint(d, 95 + _random.nextDouble() * 4))
-          .toList(),
     };
   }
 
@@ -56,7 +53,7 @@ class _GraphsScreenState extends State<GraphsScreen> {
           icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Health Graphs', style: AppTextStyles.heading3),
+        title: const Text('Health Graphs', style: AppTextStyles.heading3),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
