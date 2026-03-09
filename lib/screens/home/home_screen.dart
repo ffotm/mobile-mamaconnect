@@ -27,7 +27,6 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Column(
             children: [
-
               // ── Wave hero ────────────────────────────────────────────────
               _WaveHero(week: _week, daysToGo: _daysToGo, progress: _progress),
 
@@ -64,8 +63,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-
-          // ── Chatbot button (fixed at bottom) ─────────────────────────
           Positioned(
             left: 16,
             right: 16,
@@ -77,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFEB7155), Color(0xFFCC3D22)],
+                    colors: [Color(0xFFFF9690), Color(0xFFA53A2D)],
                   ),
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
@@ -118,10 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Wave Hero
-// ─────────────────────────────────────────────────────────────────────────────
-
 class _WaveHero extends StatelessWidget {
   final int week, daysToGo;
   final double progress;
@@ -133,7 +126,7 @@ class _WaveHero extends StatelessWidget {
     final top = MediaQuery.of(context).padding.top;
     return SizedBox(
       width: double.infinity,
-      height: top + 250,
+      height: top + 270,
       child: Stack(children: [
         // ── gradient fill clipped to wave ─────────────────────────────
         ClipPath(
@@ -144,7 +137,7 @@ class _WaveHero extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 // vivid warm coral → deep brick — matches reference exactly
-                colors: [Color(0xFFEB7155), Color(0xFFCC3D22)],
+                colors: [Color(0xFFFF9690), Color(0xFFA53A2D)],
               ),
             ),
           ),
@@ -182,18 +175,16 @@ class _WaveHero extends StatelessWidget {
   }
 }
 
-/// Produces a smooth single wave — matching the reference screenshot.
 class _WaveClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size s) {
     final p = Path()..lineTo(0, s.height - 60);
 
-    // single smooth wave that dips down in the middle
     p.quadraticBezierTo(
-      s.width * 0.5, // control point X (middle)
-      s.height + 10, // control point Y (dip down)
-      s.width, // end point X (right edge)
-      s.height - 60, // end point Y (same height as start)
+      s.width * 0.5,
+      s.height + 10,
+      s.width,
+      s.height - 60,
     );
 
     p.lineTo(s.width, 0);
@@ -235,29 +226,31 @@ class _Ring extends StatelessWidget {
   const _Ring({required this.week, required this.progress});
   @override
   Widget build(BuildContext context) => SizedBox(
-        width: 132,
-        height: 132,
+        width: 150,
+        height: 150,
         child: Stack(alignment: Alignment.center, children: [
           CustomPaint(
-              size: const Size(132, 132), painter: _RingPaint(progress)),
+              size: const Size(180, 180), painter: _RingPaint(progress)),
           Column(mainAxisSize: MainAxisSize.min, children: [
             Text('WEEK',
                 style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.78),
                     fontSize: 10,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 1.5,
                     fontFamily: 'Poppins')),
             Text('$week',
                 style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 48,
-                    fontWeight: FontWeight.w700,
+                    fontSize: 44,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins',
                     height: 1.0)),
             Text('+3 day',
                 style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.72),
                     fontSize: 11,
+                    fontWeight: FontWeight.w600,
                     fontFamily: 'Poppins')),
           ]),
         ]),
@@ -270,15 +263,16 @@ class _RingPaint extends CustomPainter {
   @override
   void paint(Canvas canvas, Size s) {
     final c = s.center(Offset.zero);
-    final r = (s.width - 14) / 2;
+    final r = (s.width + 3) / 2;
     // track
     canvas.drawCircle(
         c,
         r,
         Paint()
-          ..color = Colors.white.withValues(alpha: 0.28)
+          ..color =
+              const Color.fromARGB(255, 65, 39, 39).withValues(alpha: 0.28)
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 7);
+          ..strokeWidth = 3);
     // arc
     canvas.drawArc(
         Rect.fromCircle(center: c, radius: r),
@@ -288,17 +282,13 @@ class _RingPaint extends CustomPainter {
         Paint()
           ..color = Colors.white
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 7
+          ..strokeWidth = 3
           ..strokeCap = StrokeCap.round);
   }
 
   @override
   bool shouldRepaint(covariant _RingPaint o) => o.progress != progress;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Quick-action bar
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _QBtn extends StatelessWidget {
   final IconData icon;
@@ -366,17 +356,14 @@ class _Cell {
 }
 
 const _cells = [
-  _Cell('Safe Medicines', Icons.medication_outlined, Color(0xFF5B8DEF),
-      '/medicines'),
-  _Cell('Hospitals Nearby', Icons.local_hospital_outlined, Color(0xFFEB7155),
+  _Cell('Safe Medicines', Icons.medication, Color(0xFFE64646), '/medicines'),
+  _Cell('Hospitals Nearby', Icons.local_hospital, Color(0xFFEB7155),
       '/hospitals'),
-  _Cell('Log History', Icons.bar_chart_rounded, Color(0xFF8B5CF6), '/logs'),
-  _Cell('Symptom Tracker', Icons.favorite_border_rounded, Color(0xFFE84393),
-      '/symptoms'),
-  _Cell('Recommended Diets', Icons.restaurant_outlined, Color(0xFF10B981),
-      '/diet'),
-  _Cell('Workout Plans', Icons.directions_run_rounded, Color(0xFFF59E0B),
-      '/workouts'),
+  _Cell('Log History', Icons.bar_chart, Color(0xFF8B5CF6), '/logs'),
+  _Cell(
+      'Symptom Tracker', Icons.favorite_border, Color(0xFFE84393), '/symptoms'),
+  _Cell('Recommended Diets', Icons.restaurant, Color(0xFF10B981), '/diet'),
+  _Cell('Workout Plans', Icons.directions_run, Color(0xFFF59E0B), '/workouts'),
 ];
 
 class _Grid extends StatelessWidget {
