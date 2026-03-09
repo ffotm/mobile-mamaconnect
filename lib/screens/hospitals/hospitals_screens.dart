@@ -475,7 +475,6 @@ class _HospitalDetailScreen extends StatelessWidget {
   final VoidCallback onCall;
 
   const _HospitalDetailScreen({
-    super.key,
     required this.hospital,
     required this.onDirections,
     required this.onCall,

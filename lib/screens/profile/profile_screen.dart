@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
-import '../../widgets/custom_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../../services/auth_provider.dart';
 

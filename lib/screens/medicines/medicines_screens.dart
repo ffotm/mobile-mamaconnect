@@ -196,15 +196,6 @@ class _MedicinesScreenState extends State<MedicinesScreen>
   String _checkerQuery = '';
   _CheckerResult? _checkerResult;
 
-  final _categories = [
-    'All',
-    'Pain Relief',
-    'Antibiotic',
-    'Supplement',
-    'Antacid / PPI',
-    'Antihistamine'
-  ];
-
   @override
   void initState() {
     super.initState();

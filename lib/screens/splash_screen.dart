@@ -1,6 +1,5 @@
 // lib/screens/splash_screen.dart
 import 'package:flutter/material.dart';
-import '../constants/app_colors.dart';
 import '../constants/app_constants.dart';
 import '../services/auth_provider.dart';
 import 'package:provider/provider.dart';

@@ -6,16 +6,6 @@ import '../../constants/app_constants.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/primary_button.dart';
 
-// forward-declare the type to avoid circular imports
-class _MidwifeRef {
-  final String name;
-  final String speciality;
-  final String price;
-  const _MidwifeRef(
-      {required this.name, required this.speciality, required this.price});
-}
-
-// Accept dynamic so we can pass both _Midwife and mock data
 class ContactScreen extends StatefulWidget {
   final dynamic midwife;
 

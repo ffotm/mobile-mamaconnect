@@ -8,7 +8,6 @@ import '../../widgets/custom_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../../services/auth_provider.dart';
 import 'register_screen.dart';
-import '../midwife_dashboard/midwife_dashboard_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

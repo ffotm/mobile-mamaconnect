@@ -62,8 +62,8 @@ class _Request {
     required this.weekPregnant,
     required this.message,
     required this.time,
-    this.isPending = true,
-  });
+    bool? isPending,
+  }) : isPending = isPending ?? true;
 }
 
 final _mockClients = [
@@ -747,7 +747,7 @@ class _ActivityRow extends StatelessWidget {
 
 class _ClientDetailScreen extends StatefulWidget {
   final _Client client;
-  const _ClientDetailScreen({super.key, required this.client});
+  const _ClientDetailScreen({required this.client});
 
   @override
   State<_ClientDetailScreen> createState() => _ClientDetailScreenState();

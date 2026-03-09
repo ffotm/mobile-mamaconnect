@@ -15,7 +15,8 @@ class _Symptom {
       {required this.name,
       required this.emoji,
       required this.category,
-      this.selected = false});
+      bool? selected})
+      : selected = selected ?? false;
 }
 
 class _Recommendation {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mamacita/screens/auth/forgot_password_screen.dart';
 import 'package:mamacita/screens/diet/diet_screen.dart';
 import 'package:mamacita/screens/history/logs_history_screen.dart';
 import 'package:mamacita/screens/medicines/medicines_screens.dart';
@@ -11,7 +12,6 @@ import 'screens/splash_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/onboarding/onboarding_screen.dart';
-import 'screens/home/home_screen.dart';
 import 'screens/shell/app_shell.dart';
 import 'screens/chatbot/chatbot_screen.dart';
 import 'screens/timeline/timeline_screen.dart';
@@ -21,7 +21,6 @@ import 'screens/graphs/graphs_screen.dart';
 import 'screens/alerts/alerts_screen.dart';
 import 'screens/midwives/midwives_screen.dart';
 import 'screens/profile/profile_screen.dart';
-import 'screens/contact/contact_screen.dart';
 import 'screens/shop/shop_screen.dart';
 import 'services/auth_provider.dart';
 import 'screens/hospitals/hospitals_screens.dart';
@@ -69,6 +68,7 @@ class MamacitaApp extends StatelessWidget {
           '/workouts': (_) => const WorkoutsScreen(),
           '/symptoms': (_) => const SymptomTrackerScreen(),
           '/hospitals': (_) => const HospitalsScreen(),
+          AppRoutes.forgotPassword: (_) => const ForgotPasswordScreen(),
         },
       ),
     );

@@ -1,16 +1,7 @@
-// lib/screens/auth/forgot_password_screen.dart
 import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Forgot-password — 4 steps:
-//   0  Enter email
-//   1  6-digit OTP (with resend countdown)
-//   2  New password + strength meter
-//   3  Success
-// ─────────────────────────────────────────────────────────────────────────────
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -22,18 +13,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   int _step = 0;
   bool _loading = false;
 
-  // Step 0 – email
   final _emailCtrl = TextEditingController();
   String? _emailErr;
 
-  // Step 1 – OTP
   final _otpCtrls = List.generate(6, (_) => TextEditingController());
   final _otpFocus = List.generate(6, (_) => FocusNode());
   String? _otpErr;
   int _resendSec = 30;
   bool _resendActive = false;
 
-  // Step 2 – new password
   final _pw1Ctrl = TextEditingController();
   final _pw2Ctrl = TextEditingController();
   bool _obs1 = true;
@@ -49,8 +37,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     for (final f in _otpFocus) f.dispose();
     super.dispose();
   }
-
-  // ── Helpers ───────────────────────────────────────────────────────────────
 
   bool _isEmailValid(String e) =>
       RegExp(r'^[\w.+\-]+@[\w\-]+\.[a-z]{2,}$').hasMatch(e.trim());
@@ -99,7 +85,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       _otpErr = null;
       _loading = true;
     });
-    await Future.delayed(const Duration(seconds: 1)); // TODO: API call
+    await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
     setState(() {
       _loading = false;
@@ -138,7 +124,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     }
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -210,10 +195,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Step 0 – Email
-// ─────────────────────────────────────────────────────────────────────────────
-
 class _StepEmail extends StatelessWidget {
   final TextEditingController ctrl;
   final String? error;
@@ -229,7 +210,6 @@ class _StepEmail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _PageShell(
-      icon: '🔐',
       title: 'Forgot\nPassword?',
       subtitle:
           'No worries! Enter your registered email and we\'ll send you a 6-digit reset code.',
@@ -258,10 +238,6 @@ class _StepEmail extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Step 1 – OTP
-// ─────────────────────────────────────────────────────────────────────────────
-
 class _StepOtp extends StatelessWidget {
   final String email;
   final List<TextEditingController> ctrls;
@@ -286,7 +262,6 @@ class _StepOtp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _PageShell(
-      icon: '📨',
       title: 'Check Your\nEmail',
       subtitle: 'We sent a 6-digit code to:\n$email',
       stepIndex: 1,
@@ -412,7 +387,6 @@ class _StepNewPasswordState extends State<_StepNewPassword> {
   @override
   Widget build(BuildContext context) {
     return _PageShell(
-      icon: '🔑',
       title: 'New\nPassword',
       subtitle: 'Create a strong password for your Mamacita account.',
       stepIndex: 2,
@@ -511,12 +485,11 @@ class _StepSuccess extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _PageShell extends StatelessWidget {
-  final String icon, title, subtitle;
+  final String title, subtitle;
   final int stepIndex; // 0, 1, 2
   final Widget child;
   const _PageShell(
-      {required this.icon,
-      required this.title,
+      {required this.title,
       required this.subtitle,
       required this.stepIndex,
       required this.child});
@@ -527,28 +500,6 @@ class _PageShell extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(
           AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.xl),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        // Icon bubble
-        Container(
-          width: 64,
-          height: 64,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFFFF9690), Color(0xFFA53A2D)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                  color: const Color(0xFFA53A2D).withValues(alpha: 0.22),
-                  blurRadius: 14,
-                  offset: const Offset(0, 5))
-            ],
-          ),
-          child:
-              Center(child: Text(icon, style: const TextStyle(fontSize: 28))),
-        ),
-
         const SizedBox(height: AppSpacing.lg),
 
         // Step dots
