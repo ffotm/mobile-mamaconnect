@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_text_styles.dart';
 import '../../constants/app_constants.dart';
+import '../../widgets/next_appointment_alert.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants — change these to match actual patient data
@@ -58,7 +59,7 @@ class _Entry {
 final List<_Entry> _timelineEntries = [
   // ── FIRST TRIMESTER ───────────────────────────────────────────────────────
 
-  _Entry(
+  const _Entry(
     type: _EntryType.week,
     week: 1,
     title: 'Week 1',
@@ -692,37 +693,40 @@ class TimelineScreen extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-      builder: (_) => Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          // handle
-          Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                  color: AppColors.divider,
-                  borderRadius: BorderRadius.circular(2))),
-          const SizedBox(height: AppSpacing.md),
-          Text('Your Key Dates', style: AppTextStyles.heading3),
-          const SizedBox(height: AppSpacing.lg),
-          _DateRow('Last Period (LMP)', _kLmpDate, '📅'),
-          const Divider(),
-          _DateRow('Estimated Due Date', _kDueDate, '🎯'),
-          const Divider(),
-          _DateRow(
-              'Currently at', 'Week $_kCurrentWeek + $_kCurrentDay days', '📍'),
-          const Divider(),
-          _DateRow('Days remaining', '$daysLeft days to due date', '⏳'),
-          const Divider(),
-          _DateRow('1st Trimester ends', 'Week 12 · Nov 18, 2024', '1️⃣'),
-          const Divider(),
-          _DateRow('2nd Trimester ends', 'Week 27 · Feb 10, 2025', '2️⃣'),
-          const Divider(),
-          _DateRow('Full term (Week 39)', 'May 12, 2025', '✅'),
-          const SizedBox(height: AppSpacing.lg),
-        ]),
+      builder: (_) => SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
+            // handle
+            Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                    color: AppColors.divider,
+                    borderRadius: BorderRadius.circular(2))),
+            const SizedBox(height: AppSpacing.md),
+            Text('Your Key Dates', style: AppTextStyles.heading3),
+            const SizedBox(height: AppSpacing.lg),
+            _DateRow('Last Period (LMP)', _kLmpDate, '📅'),
+            const Divider(),
+            _DateRow('Estimated Due Date', _kDueDate, '🎯'),
+            const Divider(),
+            _DateRow('Currently at', 'Week $_kCurrentWeek + $_kCurrentDay days',
+                '📍'),
+            const Divider(),
+            _DateRow('Days remaining', '$daysLeft days to due date', '⏳'),
+            const Divider(),
+            _DateRow('1st Trimester ends', 'Week 12 · Nov 18, 2024', '1️⃣'),
+            const Divider(),
+            _DateRow('2nd Trimester ends', 'Week 27 · Feb 10, 2025', '2️⃣'),
+            const Divider(),
+            _DateRow('Full term (Week 39)', 'May 12, 2025', '✅'),
+            const SizedBox(height: AppSpacing.lg),
+          ]),
+        ),
       ),
     );
   }
@@ -1208,9 +1212,20 @@ class _ExpandedBody extends StatelessWidget {
                   )),
                   const SizedBox(width: 10),
                   OutlinedButton.icon(
-                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                    onPressed: () {
+                      setAppointmentAlert(
+                        Appointment(
+                          title: e.title,
+                          time: buildDefaultAlertTime(),
+                          icon: Icons.calendar_today,
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                            content: Text('🔔 Appointment reminder set!'))),
+                          content: Text('Appointment reminder set.'),
+                        ),
+                      );
+                    },
                     icon: const Icon(Icons.notifications_outlined, size: 15),
                     label: const Text('Alert',
                         style: TextStyle(fontFamily: 'Poppins', fontSize: 13)),
@@ -1225,26 +1240,91 @@ class _ExpandedBody extends StatelessWidget {
                   ),
                 ])
               else
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('🔔 Vaccine reminder set!'))),
-                    icon: const Icon(Icons.notifications_outlined, size: 15),
-                    label: const Text('Set Vaccine Reminder',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600)),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF10B981),
-                      side: const BorderSide(color: Color(0xFF10B981)),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppRadius.full)),
-                      padding: const EdgeInsets.symmetric(vertical: 11),
-                    ),
-                  ),
+                ValueListenableBuilder<List<Appointment>>(
+                  valueListenable: appointmentAlertsNotifier,
+                  builder: (context, _, __) {
+                    final vaccineReminderSet =
+                        hasPendingAlert(e.title, vaccineOnly: true);
+
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () {
+                              setAppointmentAlert(
+                                Appointment(
+                                  title: e.title,
+                                  time: buildDefaultAlertTime(),
+                                  icon: Icons.vaccines,
+                                  isVaccine: true,
+                                ),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Vaccine reminder set.'),
+                                ),
+                              );
+                            },
+                            icon: const Icon(Icons.notifications_outlined,
+                                size: 15),
+                            label: Text(
+                              vaccineReminderSet
+                                  ? 'Reminder Set'
+                                  : 'Set Vaccine Reminder',
+                              style: const TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFF10B981),
+                              side: const BorderSide(color: Color(0xFF10B981)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.full),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 11),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        OutlinedButton.icon(
+                          onPressed: vaccineReminderSet
+                              ? () {
+                                  markAlertAsCompleted(e.title,
+                                      vaccineOnly: true);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Vaccine marked as already gotten.'),
+                                    ),
+                                  );
+                                }
+                              : null,
+                          icon: const Icon(Icons.check_circle_outline, size: 15),
+                          label: const Text(
+                            'Already gotten',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.textDark,
+                            side: const BorderSide(color: AppColors.border),
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(AppRadius.full),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 11, horizontal: 12),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
             ],
           ]),

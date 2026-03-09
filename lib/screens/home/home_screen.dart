@@ -7,6 +7,7 @@ import '../timeline/timeline_screen.dart';
 import '../bluetooth/bluetooth_screen.dart';
 import '../alerts/alerts_screen.dart';
 import '../history/logs_history_screen.dart';
+import '../../widgets/next_appointment_alert.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
 class HomeScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // ── Wave hero ────────────────────────────────────────────────
               _WaveHero(week: _week, daysToGo: _daysToGo, progress: _progress),
-
+              const NextAppointmentAlert(),
               // ── Quick actions row ────────────────────────────────────────
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
