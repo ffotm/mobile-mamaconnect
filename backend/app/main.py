@@ -1,19 +1,17 @@
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
+
+from app.routers import auth, monitor, midwife, alerts
 
 app = FastAPI(
-    title=settings.APP_NAME,
-    description="Backend API for the Mamacita pregnancy companion app",
+    title="MamaConnect Mobile Backend",
+    description="Mock-first backend for Flutter app development with optional Supabase sync.",
     version="1.0.0",
-    docs_url="/docs",          
-    redoc_url="/redoc",
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS if not settings.DEBUG else ["*"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -21,10 +19,20 @@ app.add_middleware(
 
 
 @app.get("/", tags=["Health"])
-async def root():
-    return {"status": "ok", "app": settings.APP_NAME}
+async def root() -> dict:
+    return {
+        "message": "Backend is running",
+        "mode": "mock-first",
+        "docs": "/docs",
+    }
 
 
 @app.get("/health", tags=["Health"])
-async def health():
+async def health() -> dict:
     return {"status": "healthy"}
+
+
+app.include_router(auth.router)
+app.include_router(monitor.router)
+app.include_router(midwife.router)
+app.include_router(alerts.router)
