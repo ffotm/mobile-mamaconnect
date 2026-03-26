@@ -5,14 +5,24 @@
 // All endpoints mirror typical FastAPI REST conventions.
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../models/user_model.dart';
 
 class ApiService {
-  static const String baseUrl = String.fromEnvironment(
+  static const String _configuredBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8001',
+    defaultValue: '',
   );
+
+  String get _baseUrl {
+    if (_configuredBaseUrl.isNotEmpty) return _configuredBaseUrl;
+    if (kIsWeb) return 'http://localhost:8000';
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      return 'http://10.0.2.2:8000';
+    }
+    return 'http://127.0.0.1:8000';
+  }
 
   static const Map<String, String> _headers = {
     'Content-Type': 'application/json',
@@ -41,7 +51,7 @@ class ApiService {
     required String role, // 'client' or 'midwife'
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/auth/register'),
+      Uri.parse('$_baseUrl/auth/register'),
       headers: _headers,
       body: jsonEncode({
         'full_name': fullName,
@@ -59,7 +69,7 @@ class ApiService {
     required String password,
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/auth/login'),
+      Uri.parse('$_baseUrl/auth/login'),
       headers: _headers,
       body: jsonEncode({
         'email': email,
@@ -74,7 +84,7 @@ class ApiService {
     required String idToken,
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/auth/google'),
+      Uri.parse('$_baseUrl/auth/google'),
       headers: _headers,
       body: jsonEncode({'id_token': idToken}),
     );
@@ -86,7 +96,7 @@ class ApiService {
   /// GET /users/me
   Future<UserModel> getProfile() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/users/me'),
+      Uri.parse('$_baseUrl/users/me'),
       headers: _authHeaders,
     );
     final data = _handleResponse(response);
@@ -101,7 +111,7 @@ class ApiService {
     String? timeOfPregnancy,
   }) async {
     final response = await http.patch(
-      Uri.parse('$baseUrl/users/me'),
+      Uri.parse('$_baseUrl/users/me'),
       headers: _authHeaders,
       body: jsonEncode({
         if (birthday != null) 'birthday': birthday,
@@ -119,7 +129,7 @@ class ApiService {
   /// GET /pregnancy/status
   Future<Map<String, dynamic>> getPregnancyStatus() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/pregnancy/status'),
+      Uri.parse('$_baseUrl/pregnancy/status'),
       headers: _authHeaders,
     );
     return _handleResponse(response);
@@ -130,7 +140,7 @@ class ApiService {
   /// GET /reports/pdf  (returns bytes)
   Future<List<int>> downloadHealthReport() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/reports/pdf'),
+      Uri.parse('$_baseUrl/reports/pdf'),
       headers: _authHeaders,
     );
     if (response.statusCode == 200) {
@@ -147,7 +157,7 @@ class ApiService {
     required String date,
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/weight'),
+      Uri.parse('$_baseUrl/weight'),
       headers: _authHeaders,
       body: jsonEncode({'weight': weight, 'date': date}),
     );
@@ -157,7 +167,7 @@ class ApiService {
   /// GET /weight
   Future<List<dynamic>> getWeightHistory() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/weight'),
+      Uri.parse('$_baseUrl/weight'),
       headers: _authHeaders,
     );
     final data = _handleResponse(response);
@@ -169,7 +179,7 @@ class ApiService {
   /// POST /kicks
   Future<Map<String, dynamic>> logKick() async {
     final response = await http.post(
-      Uri.parse('$baseUrl/kicks'),
+      Uri.parse('$_baseUrl/kicks'),
       headers: _authHeaders,
       body: jsonEncode({'timestamp': DateTime.now().toIso8601String()}),
     );
@@ -184,7 +194,7 @@ class ApiService {
     required int intervalSeconds,
   }) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/contractions'),
+      Uri.parse('$_baseUrl/contractions'),
       headers: _authHeaders,
       body: jsonEncode({
         'duration_seconds': durationSeconds,

@@ -82,7 +82,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             style: AppTextStyles.heading1
                                 .copyWith(color: AppColors.primary)),
                       ),
-                      const SizedBox(height: AppSpacing.xl),
+                      const SizedBox(height: AppSpacing.lg),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(AppRadius.full),
+                        child: const LinearProgressIndicator(
+                          value: 1 / 3,
+                          minHeight: 8,
+                          backgroundColor: AppColors.border,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(AppColors.primary),
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        'Step 1 of 3',
+                        style: AppTextStyles.bodySmall
+                            .copyWith(color: AppColors.textMedium),
+                      ),
+                      const SizedBox(height: AppSpacing.lg),
                       AuthTabSwitcher(
                         activeIndex: 1,
                         onTabChanged: (index) {

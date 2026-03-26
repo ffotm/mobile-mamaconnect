@@ -7,6 +7,7 @@ import '../../constants/app_constants.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../../services/auth_provider.dart';
+import '../auth/registration_terms_screen.dart';
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -88,15 +89,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ].join(', ')
         : 'None';
 
-    final auth = context.read<AuthProvider>();
-    await auth.updateProfile(
-      birthday: _birthdayController.text.trim(),
-      illnesses: illnesses,
-      allergies: allergies,
-      timeOfPregnancy: '$_pregnancyWeeks weeks',
-    );
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, AppRoutes.home);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RegistrationTermsScreen(
+          birthday: _birthdayController.text.trim(),
+          illnesses: illnesses,
+          allergies: allergies,
+          timeOfPregnancy: '$_pregnancyWeeks weeks',
+        ),
+      ),
+    );
   }
 
   @override
@@ -128,6 +132,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: screenHeight * 0.28),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(AppRadius.full),
+                      child: const LinearProgressIndicator(
+                        value: 2 / 3,
+                        minHeight: 8,
+                        backgroundColor: AppColors.border,
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(AppColors.primary),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      'Step 2 of 3',
+                      style: AppTextStyles.bodySmall
+                          .copyWith(color: AppColors.textMedium),
+                    ),
+
+                    const SizedBox(height: AppSpacing.lg),
 
                     // Birthday
                     const _FormLabel(text: 'When is your birthday?'),

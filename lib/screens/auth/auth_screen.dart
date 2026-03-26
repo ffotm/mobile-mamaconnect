@@ -7,6 +7,7 @@ import '../../widgets/auth_tab_switcher.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/primary_button.dart';
 import '../../services/auth_provider.dart';
+import '../../models/user_model.dart';
 import 'register_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -109,7 +110,7 @@ class _LoginFormState extends State<_LoginForm> {
     );
     if (!mounted) return;
     if (success) {
-      if (_emailController.text.trim() == "midwife@example.com") {
+      if (auth.user?.role == UserRole.midwife) {
         Navigator.pushReplacementNamed(context, AppRoutes.midwifeDashboard);
       } else {
         Navigator.pushReplacementNamed(context, AppRoutes.home);
